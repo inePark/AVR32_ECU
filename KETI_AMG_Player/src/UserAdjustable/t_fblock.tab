@@ -1,0 +1,176 @@
+/*
+==============================================================================
+
+Project:        MOST NetServices V3 for INIC
+Module:         Table for MOST Command Interpreter containing
+                all available FBlocks and Array of Default InstIDs
+File:           T_FBlock.tab
+Version:        3.0.2.Alpha.1
+Language:       C
+Author(s):      S.Kerber
+Date:           03.September.2009
+
+FileGroup:      Layer II
+Customer ID:    <None; as non-released alpha version>
+FeatureCode:    FCR1
+------------------------------------------------------------------------------
+
+                (c) Copyright 1998-2009
+                SMSC
+                All Rights Reserved
+
+------------------------------------------------------------------------------
+
+
+
+Modifications
+~~~~~~~~~~~~~
+Date    By      Description
+
+==============================================================================
+*/
+
+
+#ifndef _T_FBLOCK_TAB
+#define _T_FBLOCK_TAB
+
+#include "fblock_pv_amp.h"
+#include "fblock_pv_auxin.h"
+#include "fblock_pv_tool.h"
+
+/*-----------------------------------------------------------------*/
+/*  Declaration of extern Function Tables of respective            */
+/*  FBlocks and FBlock Shadows                                     */
+/*-----------------------------------------------------------------*/
+
+
+extern _CONST struct Func_L_Type Func_NetBlock[];                       /* Table containing all FktIDs */
+                                                                        /* of FBlock: NetBlock */
+extern _CONST struct Func_L_Type Func_Amp[];                            /* Add your own FktID tables !!! */
+extern _CONST struct Func_L_Type Func_Auxin[];
+extern _CONST struct Func_L_Type Func_TOOL[];
+
+#ifdef NETWORKMASTER_SHADOW                                             /* Only if a NetworkMaster Shadow is implemented */
+extern _CONST struct Func_L_Type Func_NetworkMaster_S[];                /* Table containing FktIDs */
+#endif                                                                  /* of FBlock: NetworkMaster Shadow */
+
+
+#ifdef NETWORKMASTER_LOCAL                                              /* Only if the NetworkMaster is local */
+extern _CONST struct Func_L_Type Func_NetworkMaster[];                  /* Table containing FktIDs */
+#endif                                                                  /* of FBlock: NetworkMaster  (not part of L2) */
+
+#ifdef ET_MIN                                                           /* Only if FBlock ET is implemented */
+extern _CONST struct Func_L_Type Func_ET[];                           /* Table containing FktIDs */
+#endif                                                                  /* of FBlock: Enhanced Testability */
+
+
+
+/*-----------------------------------------------------------------*/
+/*  Local Definitions                                              */
+/*-----------------------------------------------------------------*/
+
+    #define NONE                    0
+    #define DONT_CARE               NULL
+    #define PTR_INSTID(idx)         &NetBlock.pFBlockIDs.InstID[idx]    /* Ptr onto InstID during runtime */
+                                                                        /* (idx=Index in array InstIDsDefault[] !) */
+
+    #define PTR_SHDW_INSTID(idx)    &InstIDShadow[idx]                  /* Ptr onto InstID Shadow during runtime */
+                                                                        /* (idx=Index in array InstIDsShadowDefault[] !) */
+
+
+    /* NetBlock & NetBlock Shadow: */
+    #define FBLOCK_NETBLOCK_ID      FBLOCK_NETBLOCK     /* FBlockID of NetBlock  */
+    #define INST_NETBLOCK           NONE                /* InstID Default for NetBlock  */
+                                                        /* Please note: NetBlock has no index ! */
+
+    /* FBlock ET: */
+    #define FBLOCK_ET_ID            FBLOCK_ET           /* FBlockID of FBlock ET (already defined in protocol.h) */
+    #define INST_ET                 NONE                /* InstID Default for FBlock ET  */
+    #define IDX_ET                  1                   /* Index in array InstIDsDefault[] */
+
+    /* FBlock NetworkMaster (local): */
+    #define FBLOCK_NWM              FBLOCK_NETWORKMASTER /* FBlockID of FBlock NWM  */
+    #define INST_NWM                NETWORKMASTER_INSTID /* InstID Default for FBlock NWM  */
+    #define IDX_NWM                 2                    /* Index in array InstIDsDefault[] */
+
+    /* FBlock NetworkMaster Shadow: */
+    #define FBLOCK_NWM_SHDW         FBLOCK_NETWORKMASTER /* FBlockID of FBlock NWM  */
+    #define INST_NWM_SHDW           NONE                 /* InstID Default for FBlock NWM Shadow */
+    #define IDX_NWM_SHDW            0                    /* Index in array InstIDsShadowDefault[] */
+
+
+
+
+/*----------------------------------------------------------------------------------------------*/
+/*                  Table of all available FBlocks and FBlock Shadows                           */
+/*               -------------------------------------------------------                        */
+/*                                                                                              */
+/*      Order of Registration:  1. FBlock NetBlock                                              */
+/*                              2. most important FBlock                                        */
+/*                              3.                                                              */
+/*                              .  further "real" FBlocks                                       */
+/*                              .                                                               */
+/*                              .  last "real" FBlock                                           */
+/*                              .                                                               */
+/*                              .  all FBlock Shadows which can receive                         */
+/*                              .           report messages only                                */
+/*                              n.                                                              */
+/*                                                                                              */
+/*      n = 1 (NetBlock) + number of other own FBlocks + number of FBlockShadows                */
+/*                                                                                              */
+/*----------------------------------------------------------------------------------------------*/
+/*      FBlockID            |       Ptr on InstID of            |   Ptr on FktID table of       */
+/*                          |       certain FBlock              |   certain FBlock              */
+/*----------------------------------------------------------------------------------------------*/
+/*                                                                                              */
+_CONST struct FBlock_L_Type FBlocks[CMD_SIZE_FBLOCK_TABLE] =
+
+    {
+      { FBLOCK_NETBLOCK,        DONT_CARE,                          &Func_NetBlock[0]		}	/* NetBlock */
+     ,{ FBLOCK_AMP,             PTR_INSTID(AMP_INDEX),    			&Func_Amp[0]        	}   /* Amplifier FBlock */
+     ,{ FBLOCK_AUXIN,           PTR_INSTID(AUXIN_INDEX),  			&Func_Auxin[0]    		}	/* Aux In FBlock */
+	 ,{ FBLOCK_TOOL,			PTR_INSTID(TOOL_INDEX),				&Func_TOOL[0]			}	/* TOOL FBlock */
+	 /* (FBlockIndex: 0x00) */
+
+     #ifdef ET_MIN
+     ,{ FBLOCK_ET_ID,           DONT_CARE,                          &Func_ET[0]             }   /* FBlock ET  */
+     #endif
+
+/*   #ifdef NETWORKMASTER_LOCAL                                                                 */
+/*   ,{ FBLOCK_NWM,             PTR_INSTID(IDX_NWM),                &Func_NetworkMaster[0]  }   */ /* NetworkMaster (not part of L2)  */
+/*   #endif                                                                                     */ /* (FBlockIndex: ?)  */
+
+    /* following FBlocks can receive report messages only (FBlockShadows):                  */
+
+     #ifdef NETWORKMASTER_SHADOW
+     ,{ FBLOCK_NWM_SHDW,        DONT_CARE,                          &Func_NetworkMaster_S[0] }   /* NetworkMaster Shadow,  */
+     #endif                                                                                      /* ignore incoming InstID */
+                                                                                                 /* (ShadowIndex: 0) */
+
+    };
+/*----------------------------------------------------------------------------------------------*/
+
+
+
+
+
+/*----------------------------------------------------------------------------------------------*/
+/*                  Array of all InstIDs (Defaultvalues after Initialisation)                   */
+/*                                                                                              */
+/*----------------------------------------------------------------------------------------------*/
+
+    #if (NUM_FBLOCKS > 0)
+    #ifdef ET_MIN
+    _CONST byte InstIDsDefault[NUM_FBLOCKS] = { INST_AMP, INST_AUXIN, INST_ET };    /* Enter your InstID default value for each */
+    #else                                                                   /* FBlock, except for the NetBlock.         */
+    _CONST byte InstIDsDefault[NUM_FBLOCKS] = { INST_AMP, INST_AUXIN };
+    #endif
+    #endif
+
+    #if (NUM_FBLOCKS_SHADOW > 0)
+    _CONST byte InstIDsShadowDefault[NUM_FBLOCKS_SHADOW] = { INST_NWM_SHDW }; /* Enter your InstID default value for each */
+    #endif                                                                    /* FBlock Shadow (inclusive NetworkMaster Shadow) */
+
+
+
+#endif /* T_FBLOCK_TAB */

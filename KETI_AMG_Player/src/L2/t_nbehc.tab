@@ -1,0 +1,435 @@
+/*
+==============================================================================
+
+Project:        MOST NetServices V3 for INIC
+Module:         Table of available Functions and Operations of FBlock: NetBlock (EHC part)
+File:           T_NBEHC.tab
+Version:        3.0.x-SR-1  
+Language:       C
+Author(s):      S.Kerber
+Date:           05.January.2011
+
+FileGroup:      Layer II
+Customer ID:    0018FF2A0300xx.N.KETI
+FeatureCode:    FCR1
+------------------------------------------------------------------------------
+
+                (c) Copyright 1998-2011
+                SMSC
+                All Rights Reserved
+
+------------------------------------------------------------------------------
+
+
+
+Modifications
+~~~~~~~~~~~~~
+Date    By      Description
+
+==============================================================================
+*/
+
+#ifndef _T_NB_TAB
+#define _T_NB_TAB
+
+
+
+
+/*-------------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock: NetBlock                                   */
+/*                                              Function: FBlockIDs                                */
+/*-------------------------------------------------------------------------------------------------*/
+/*    OP_TYPE       |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*                  |          |                         |                         |               */
+/*-------------------------------------------------------------------------------------------------*/
+/*                                                                                                 */
+_CONST struct Op_L_Type Op_NetBlock_FBlockIDs[] =
+
+  {
+/*  { OP_SET,          0xD0,   NS_F_V NB_FBlockIDs_Set,      NULL,                    LC_EQ(3) },  */ /* NetBlock.FBlockIDs.Set */
+    { OP_GET,          0x02,   0,                            NS_F_V NB_FBlockIDs_Get, LC_EQ(0) },  /* NetBlock.FBlockIDs.Get */
+    { OP_SETGET,       0xD2,   NS_F_V NB_FBlockIDs_Set,      NS_F_V NB_FBlockIDs_Get, LC_EQ(3) },  /* NetBlock.FBlockIDs.SetGet */
+      #ifdef NB_I2C
+    { OP_STATUS,       0x50,   NS_F_V NB_FBlockIDs_Status,   NULL,                    LC_GE(0) },  /* NetBlock.FBlockIDs.Status */
+      #endif
+      #ifdef NB_I2F
+    { OP_ERROR,        0x50,   NS_F_V NB_FBlockIDs_Error,    NULL,                    LC_GE(1) },  /* NetBlock.FBlockIDs.Error */
+      #endif
+    { OP_TERMINATION,  0,      NULL,                         NULL,                    LC_NO    }
+  };
+/*-------------------------------------------------------------------------------------------------*/
+
+
+
+
+/*-------------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock: NetBlock                                   */
+/*                                              Function: DeviceInfo                               */
+/*-------------------------------------------------------------------------------------------------*/
+/*    OP_TYPE       |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*                  |          |                         |                         |               */
+/*-------------------------------------------------------------------------------------------------*/
+/*                                                                                                 */
+_CONST struct Op_L_Type Op_NetBlock_DeviceInfo[] =
+
+  {
+    { OP_GET,          0x02,   NULL,                         NS_F_V NB_DeviceInfo_Get, LC_EQ(1) }, /* NetBlock.DeviceInfo.Get */
+      #ifdef NB_I3C
+    { OP_STATUS,       0x50,   NS_F_V NB_DeviceInfo_Status,  NULL,                     LC_GE(1) }, /* NetBlock.DeviceInfo.Status */
+      #endif
+      #ifdef NB_I3F
+    { OP_ERROR,        0x50,   NS_F_V NB_DeviceInfo_Error,   NULL,                     LC_GE(1) }, /* NetBlock.DeviceInfo.Error */
+      #endif
+    { OP_TERMINATION,  0,      NULL,                         NULL,                     LC_NO    }
+  };
+/*-------------------------------------------------------------------------------------------------*/
+
+
+
+
+
+/*-------------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock: NetBlock                                   */
+/*                                              Function: ShutDown                                 */
+/*-------------------------------------------------------------------------------------------------*/
+/*    OP_TYPE       |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*                  |          |                         |                         |               */
+/*-------------------------------------------------------------------------------------------------*/
+/*                                                                                                 */
+_CONST struct Op_L_Type Op_NetBlock_ShutDown[] =
+
+  {
+    { OP_START,        0xD0,   NS_F_V NB_ShutDown_Start,     NULL,                     LC_EQ(1) }, /* NetBlock.ShutDown.Start */
+      #ifdef NB_I7C
+    { OP_RESULT,       0x50,   NS_F_V NB_ShutDown_Result,    NULL,                     LC_EQ(1) }, /* NetBlock.ShutDown.Result */
+      #endif
+      #ifdef NB_I7F
+    { OP_ERROR,        0x50,   NS_F_V NB_ShutDown_Error,     NULL,                     LC_GE(1) }, /* NetBlock.ShutDown.Error */
+      #endif
+    { OP_TERMINATION,  0,      NULL,                         NULL,                     LC_NO    }
+  };
+/*-------------------------------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+/*-------------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock: NetBlock                                   */
+/*                                              Function: NodePositionAddress                      */
+/*-------------------------------------------------------------------------------------------------*/
+/*    OP_TYPE       |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*                  |          |                         |                         |               */
+/*-------------------------------------------------------------------------------------------------*/
+/*                                                                                                 */
+_CONST struct Op_L_Type Op_NetBlock_NodePosition[] =
+
+  {
+      #ifdef NB_I9C
+    { OP_STATUS,     0x50,  NS_F_V NB_NodePosition_Status, NULL,                            LC_GE(2) }, /* NetBlock.NodePositionAddress.Status */
+      #endif
+      #ifdef NB_I9F
+    { OP_ERROR,      0x50,  NS_F_V NB_NodePosition_Error,  NULL,                            LC_GE(1) }, /* NetBlock.NodePositionAddress.Error */
+      #endif
+    { OP_TERMINATION,   0,  NULL,                          NULL,                            LC_NO    }
+  };
+/*-------------------------------------------------------------------------------------------------*/
+
+
+
+
+/*-------------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock: NetBlock                                   */
+/*                                              Function: NodeAddress                              */
+/*-------------------------------------------------------------------------------------------------*/
+/*    OP_TYPE       |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*                  |          |                         |                         |               */
+/*-------------------------------------------------------------------------------------------------*/
+/*                                                                                                 */
+_CONST struct Op_L_Type Op_NetBlock_NodeAddress[] =
+
+  {
+      #ifdef NB_I1C
+    { OP_STATUS,      0x50,  NS_F_V NB_NodeAddr_Status, NULL,                          LC_GE(2) }, /* NetBlock.NodeAddress.Status */
+      #endif
+      #ifdef NB_I1F
+    { OP_ERROR,       0x50,  NS_F_V NB_NodeAddr_Error,  NULL,                          LC_GE(1) }, /* NetBlock.NodeAddress.Error */
+      #endif
+    { OP_TERMINATION, 0,     NULL,                      NULL,                          LC_NO    }
+  };
+/*-------------------------------------------------------------------------------------------------*/
+
+
+
+
+/*-------------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock: NetBlock                                   */
+/*                                              Function: GroupAddress                             */
+/*-------------------------------------------------------------------------------------------------*/
+/*    OP_TYPE       |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*                  |          |                         |                         |               */
+/*-------------------------------------------------------------------------------------------------*/
+/*                                                                                                 */
+_CONST struct Op_L_Type Op_NetBlock_GroupAddress[] =
+
+  {
+      #ifdef NB_I4C
+    { OP_STATUS,     0x50, NS_F_V NB_GroupAddr_Status, NULL,                           LC_GE(2) }, /* NetBlock.GroupAddress.Status */
+      #endif
+      #ifdef NB_I4F
+    { OP_ERROR,      0x50, NS_F_V NB_GroupAddr_Error,  NULL,                           LC_GE(1) }, /* NetBlock.GroupAddress.Error */
+      #endif
+    { OP_TERMINATION,   0, NULL,                       NULL,                           LC_NO    }
+  };
+/*-------------------------------------------------------------------------------------------------*/
+
+
+
+
+/*-------------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock: NetBlock                                   */
+/*                                              Function: Version                                  */
+/*-------------------------------------------------------------------------------------------------*/
+/*    OP_TYPE       |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*                  |          |                         |                         |               */
+/*-------------------------------------------------------------------------------------------------*/
+/*                                                                                                 */
+_CONST struct Op_L_Type Op_NetBlock_Version[] =
+{
+  #ifdef NB_I151
+  { OP_GET,          0x01, NULL,                          NS_F_V NB_Version_Get,              LC_EQ(0) }, /* NetBlock.Version.Get */
+  #endif
+  #ifdef NB_I15C
+  { OP_STATUS,       0x50, NS_F_V NB_Version_Status,      NULL,                               LC_GE(3) }, /* NetBlock.Version.Status */
+  #endif
+  #ifdef NB_I15F
+  { OP_ERROR,        0x50, NS_F_V NB_Version_Error,       NULL,                               LC_GE(1) }, /* NetBlock.Version.Error */
+  #endif
+  { OP_TERMINATION,  0x00, NULL,                          NULL,                               LC_NO    }
+};
+
+
+
+
+
+/*-------------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock: NetBlock                                   */
+/*                                              Function: FBlockInfo                               */
+/*-------------------------------------------------------------------------------------------------*/
+/*    OP_TYPE       |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*                  |          |                         |                         |               */
+/*-------------------------------------------------------------------------------------------------*/
+/*                                                                                                 */
+_CONST struct Op_L_Type Op_NetBlock_FBlockInfo[] =
+{
+  #ifdef NB_I171
+  { OP_GET,          0x02, NULL,                          NS_F_V NB_FBlockInfo_Get,     LC_EQ(2) }, /* NetBlock.FBlockInfo.Get */
+  #endif
+  #ifdef NB_I17C
+  { OP_STATUS,       0x50, NS_F_V NB_FBlockInfo_Status,   NULL,                         LC_GE(3) }, /* NetBlock.FBlockInfo.Status */
+  #endif
+  #ifdef NB_I17F
+  { OP_ERROR,        0x50, NS_F_V NB_FBlockInfo_Error,    NULL,                         LC_GE(1) }, /* NetBlock.FBlockInfo.Error */
+  #endif
+  { OP_TERMINATION,  0x00, NULL,                          NULL,                         LC_NO    }
+};
+
+
+
+
+
+
+
+
+/*-------------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock: NetBlock                                   */
+/*                                              Function: RetryParameters                          */
+/*-------------------------------------------------------------------------------------------------*/
+/*    OP_TYPE       |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*                  |          |                         |                         |               */
+/*-------------------------------------------------------------------------------------------------*/
+/*                                                                                                 */
+_CONST struct Op_L_Type Op_NetBlock_RetryParameters[] =
+
+  {
+      #ifdef NB_I10C
+    { OP_STATUS,     0x50, NS_F_V NB_RetryParameters_Status, NULL,                       LC_GE(2)},/* NetBlock.RetryParameters.Status */
+      #endif
+      #ifdef NB_I10F
+    { OP_ERROR,      0x50, NS_F_V NB_RetryParameters_Error,  NULL,                       LC_GE(1)},/* NetBlock.RetryParameters.Error */
+      #endif
+    { OP_TERMINATION,   0, NULL,                             NULL,                       LC_NO   }
+  };
+/*-------------------------------------------------------------------------------------------------*/
+
+
+/*-------------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock: NetBlock                                   */
+/*                                              Function: SamplingFrequency                        */
+/*-------------------------------------------------------------------------------------------------*/
+/*    OP_TYPE       |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*                  |          |                         |                         |               */
+/*-------------------------------------------------------------------------------------------------*/
+/*                                                                                                 */
+_CONST struct Op_L_Type Op_NetBlock_SamplingFrequency[] =
+
+  {
+      #ifdef NB_I11C
+    { OP_STATUS,       0x50,   NS_F_V NB_SamplingFrequency_Status,  NULL,                 LC_GE(4) }, /* NetBlock.SamplingFrequency.Status */
+      #endif
+      #ifdef NB_I11F
+    { OP_ERROR,        0x50,   NS_F_V NB_SamplingFrequency_Error,   NULL,                 LC_GE(1) }, /* NetBlock.SamplingFrequency.Error */
+      #endif
+    { OP_TERMINATION,  0,      NULL,                                NULL,                 LC_NO    }
+  };
+/*-------------------------------------------------------------------------------------------------*/
+
+
+
+
+/*-------------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock: NetBlock                                   */
+/*                                              Function: ShutDownReason                                */
+/*-------------------------------------------------------------------------------------------------*/
+/*    OP_TYPE       |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*                  |          |                         |                         |               */
+/*-------------------------------------------------------------------------------------------------*/
+/*                                                                                                 */
+#ifdef _OS81110_SSO
+_CONST struct Op_L_Type Op_NetBlock_ShutDownReason[] =
+
+  {
+      #ifdef NB_I160
+    { OP_SET,          0xD0,   NS_F_V NB_ShutDownReason_Set,     NULL,                  LC_EQ(1)  },
+      #endif
+      #ifdef NB_I161
+    { OP_GET,          0x01,   NULL,                       NS_F_V NB_ShutDownReason_Get, LC_EQ(0) },
+      #endif
+      #ifdef NB_I16C
+    { OP_STATUS,       0x50,   NS_F_V NB_ShutDownReason_Status,  NULL,                  LC_GE(2) },      /* NetBlock.ShutDownReason.Status */
+      #endif
+      #ifdef NB_I16F
+    { OP_ERROR,        0x50,   NS_F_V NB_ShutDownReason_Error,   NULL,                  LC_GE(1) },      /* NetBlock.ShutDownReason.Error */
+      #endif
+    { OP_TERMINATION,  0,      NULL,                             NULL,                  LC_NO    }
+  };
+#endif
+/*-------------------------------------------------------------------------------------------------*/
+
+
+
+/*----------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock:     NetBlock                       */
+/*                                              Function:   Boundary                            */
+/*----------------------------------------------------------------------------------------------*/
+/*    OP_TYPE    |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*               |          |                         |                         |               */
+/*----------------------------------------------------------------------------------------------*/
+/*                                                                                              */
+_CONST struct Op_L_Type Op_NetBlock_Boundary[] =
+
+  {
+    /* OpType GET is handled in INIC */
+      #ifdef NB_I142
+    /* OpTypeSETGET    */
+    { OP_SETGET,       0xD0, NS_F_V NB_Boundary_SetGet, NULL,                       LC_EQ(1)},  /* NetBlock.Boundary.SetGet */
+      #endif
+      #ifdef NB_I14C
+    { OP_STATUS,       0x50, NS_F_V NB_Boundary_Status, NULL,                       LC_GE(1)},  /* NetBlock.Boundary.Status */
+      #endif
+      #ifdef NB_I14F
+    { OP_ERROR,        0x50, NS_F_V NB_Boundary_Error,  NULL,                       LC_GE(1)},  /* NetBlock.Boundary.Error */
+      #endif
+    { OP_TERMINATION,  0,    NULL,                      NULL,                       LC_NO    }
+  };
+/*----------------------------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock:     NetBlock                       */
+/*                                              Function:   ImplFBlocks                            */
+/*----------------------------------------------------------------------------------------------*/
+/*    OP_TYPE    |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*               |          |                         |                         |               */
+/*----------------------------------------------------------------------------------------------*/
+/*                                                                                              */
+_CONST struct Op_L_Type Op_NetBlock_ImplFBlocks[] =
+
+  {
+      #ifdef NB_I181
+    { OP_GET,          0x01, NULL,                         NS_F_V NB_ImplFBlocks_Get,  LC_EQ(0)},  /* NetBlock.ImplFBlocks.Get */
+      #endif
+      #ifdef NB_I18C
+    { OP_STATUS,       0x50, NS_F_V NB_ImplFBlocks_Status, NULL,                       LC_GE(1)},  /* NetBlock.ImplFBlocks.Status */
+      #endif
+      #ifdef NB_I18F
+    { OP_ERROR,        0x50, NS_F_V NB_ImplFBlocks_Error,  NULL,                       LC_GE(1)},  /* NetBlock.ImplFBlocks.Error */
+      #endif
+    { OP_TERMINATION,  0,    NULL,                         NULL,                       LC_NO    }
+  };
+/*----------------------------------------------------------------------------------------------*/
+
+
+
+/*----------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock:     NetBlock                       */
+/*                                              Function:   EUI48                            */
+/*----------------------------------------------------------------------------------------------*/
+/*    OP_TYPE    |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*               |          |                         |                         |               */
+/*----------------------------------------------------------------------------------------------*/
+/*                                                                                              */
+_CONST struct Op_L_Type Op_NetBlock_EUI48[] =
+
+  {
+      #ifdef NB_I19C
+    { OP_STATUS,       0x50, NS_F_V NB_EUI48_Status,       NULL,                       LC_GE(1)},  /* NetBlock.EUI48.Status */
+      #endif
+      #ifdef NB_I19F
+    { OP_ERROR,        0x50, NS_F_V NB_EUI48_Error,        NULL,                       LC_GE(1)},  /* NetBlock.EUI48.Error */
+      #endif
+    { OP_TERMINATION,  0,    NULL,                         NULL,                       LC_NO    }
+  };
+/*----------------------------------------------------------------------------------------------*/
+
+
+
+/*------------------------------------------------------------------------------*/
+/*      Table of available FktIDs of            FBlock: NetBlock                */
+/*                                                                              */
+/*------------------------------------------------------------------------------*/
+/*      FktID                   |   Ptr on table with OP_Types                  */
+/*                              |                                               */
+/*------------------------------------------------------------------------------*/
+/*                                                                              */
+_CONST struct Func_L_Type Func_NetBlock[] =
+
+    {
+      { FUNC_FBLOCKIDS,             &Op_NetBlock_FBlockIDs[0]         },        /* NetBlock.FBlockIDs */
+      { FUNC_DEVICEINFO,            &Op_NetBlock_DeviceInfo[0]        },        /* NetBlock.DeviceInfo */
+      { FUNC_NODEPOSITION,          &Op_NetBlock_NodePosition[0]      },        /* NetBlock.NodePosition */
+      { FUNC_NODEADDRESS,           &Op_NetBlock_NodeAddress[0]       },        /* NetBlock.NodeAddress */
+      { FUNC_GROUPADDRESS,          &Op_NetBlock_GroupAddress[0]      },        /* NetBlock.GroupAddress */
+      { FUNC_SHUTDOWN,              &Op_NetBlock_ShutDown[0]          },        /* NetBlock.ShutDown */
+      { FUNC_RETRYPARAMETERS,       &Op_NetBlock_RetryParameters[0]   },        /* NetBlock.RetryParameters */
+      { FUNC_SAMPLINGFREQUENCY,     &Op_NetBlock_SamplingFrequency[0] },        /* NetBlock.SamplingFrequency */
+      #ifdef _OS81110_SSO
+      { FUNC_SHUTDOWNREASON,        &Op_NetBlock_ShutDownReason[0]    },        /* NetBlock.ShutDownReason */
+      #endif
+      { FUNC_VERSION,               &Op_NetBlock_Version[0]           },        /* NetBlock.Version */
+      { FUNC_FBLOCKINFO,            &Op_NetBlock_FBlockInfo[0]        },        /* NetBlock.FBlockInfo */
+      { FUNC_EUI48,                 &Op_NetBlock_EUI48[0]             },        /* NetBlock.EUI48 */
+      { FUNC_IMPLFBLOCKIDS,         &Op_NetBlock_ImplFBlocks[0]       },        /* NetBlock.ImplFBlocks */
+      { FUNC_NB_BOUNDARY,           &Op_NetBlock_Boundary[0]          },        /* NetBlock.Boundary */
+      { FUNC_TERMINATION,           NULL                                 }
+    };
+/*------------------------------------------------------------------------------*/
+
+
+
+
+
+#endif /* _T_NB_TAB */

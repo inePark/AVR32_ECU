@@ -1,0 +1,1337 @@
+/*
+==============================================================================
+
+Project:        MOST NetServices V3 for INIC
+Module:         Internal INIC control message distribution table (Basic Layer)
+File:           inic.tab
+Version:        3.0.x-SR-1  
+Language:       C
+Author(s):      S.Semmler
+Date:           05.January.2011
+
+FileGroup:      Layer I
+Customer ID:    0018FF2A0300xx.N.KETI
+FeatureCode:    FCR1
+------------------------------------------------------------------------------
+
+                (c) Copyright 1998-2011
+                SMSC
+                All Rights Reserved
+
+------------------------------------------------------------------------------
+
+
+
+Modifications
+~~~~~~~~~~~~~
+Date            By      Description
+
+==============================================================================
+*/
+
+/*! \file
+  * \brief      Internal INIC control message distribution table (Basic Layer)
+  */
+
+/*lint --e{545} Suspicious use of & */
+
+
+#ifndef PACKET_COMMUNICATION_ONLY
+/*
+------------------------------------------------------------------------------
+    INIC.WatchdogMode.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_watchdogmode_status[] =
+{
+    MnsHandleWatchdogModeStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.WatchdogMode.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_watchdogmode_error[] =
+{
+    MnsHandleError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.WatchdogMode
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_watchdogmode[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_watchdogmode_status   },
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_watchdogmode_error    },
+    {   0,              NULL                                               }
+};
+#endif
+
+#if (defined MNS_MIN) && (!defined MNS_AVOID_ATTACH)
+
+
+/*
+------------------------------------------------------------------------------
+    INIC.RemoteAccess.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_remote_access_error[] =
+{
+    MnsHandleError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.RemoteAccess
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_remote_access[] =
+{
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_remote_access_error  },
+    {   0,              NULL                                              }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.BIST.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_bist_status[] =
+{
+    MnsHandleError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.BIST
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_bist[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_bist_status          },
+    {   0,              NULL                                              }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.EHCIState.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_ehcistate_status[] =
+{
+    MnsHandleEHCIStateStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.EHCIState
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_ehcistate[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_ehcistate_status   },
+    {   0,              NULL                                            }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.VersionInfo.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_versioninfo_status[] =
+{
+    MnsHandleVersionInfo,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.VersionInfo
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_versioninfo[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_versioninfo_status },
+    {   0,              NULL                                            }
+};
+
+#endif
+
+#ifdef VMSV_MIN
+
+/*
+------------------------------------------------------------------------------
+    INIC.NIState.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_nistate_status[] =
+{
+    VmsvHandleNIStateStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.NIState
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_nistate[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_nistate_status     },
+    {   0,              NULL                                            }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.DeviceMode.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_devmode_status[] =
+{
+    VmsvHandleDeviceModeStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.DeviceMode
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_devmode[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_devmode_status     },
+    {   0,              NULL                                            }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.LockState.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_lockstate_status[] =
+{
+    VmsvHandleLockStateStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.LockState
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_lockstate[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_lockstate_status   },
+    {   0,              NULL                                            }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.NCEDelayed.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_ncedelayed_status[] =
+{
+    VmsvHandleNCEDelayedStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.NCEDelayed
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_ncedelayed[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_ncedelayed_status },
+    {   0,              NULL                                           }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.NIEvent.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_nievent_status[] =
+{
+    VmsvHandleNIEventStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.NIEvent
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_nievent[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_nievent_status    },
+    {   0,              NULL                                           }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.NCState.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_ncstate_status[] =
+{
+    VmsvHandleNCStateStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.NCState
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_ncstate[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_ncstate_status    },
+    {   0,              NULL                                           }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.RBDResult.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_rbdresult_status[] =
+{
+    VmsvHandleRBDResultStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.RBDResult
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_rbdresult[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_rbdresult_status   },
+    {   0,              NULL                                            }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.NWStartup.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_nwstartup_error[] =
+{
+    VmsvHandleNWStartupError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.NWStartup
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_nwstartup[] =
+{
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_nwstartup_error  },
+    {   0,              NULL                                          }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.NWShutdown.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_nwshutdown_error[] =
+{
+    VmsvHandleNWShutdownError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.NWShutdown
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_nwshutdown[] =
+{
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_nwshutdown_error  },
+    {   0,              NULL                                           }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.PMIState.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_pmistate_status[] =
+{
+    VmsvHandlePMIStateStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.PMIState
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_pmistate[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_pmistate_status   },
+    {   0,              NULL                                           }
+};
+
+
+/*
+------------------------------------------------------------------------------
+    INIC.SysErrMonitor.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_sys_err_monitor_status[] =
+{
+    VmsvHandleSysErrMonitorStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.SysErrMonitor
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_sys_err_monitor[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_sys_err_monitor_status },
+    {   0,              NULL                                                }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.NetOnTimer.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_net_on_timer_status[] =
+{
+    VmsvHandleNetOnTimerStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.NetOnTimer.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_net_on_timer_error[] =
+{
+    VmsvHandleNetOnTimerError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.NetOnTimer
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_net_on_timer[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_net_on_timer_status    },
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_net_on_timer_error     },
+    {   0,              NULL                                                }
+};
+
+
+#ifdef MSV_DIAG_RESULT_MSG
+/*
+------------------------------------------------------------------------------
+    INIC.NIWakeupMode.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_niwakeupmode_status[] =
+{
+    VmsvHandleNIWakeupModeStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.NIWakeupMode.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_niwakeupmode_error[] =
+{
+    VmsvHandleNIWakeupModeError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.NIWakeupMode
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_niwakeupmode[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_niwakeupmode_status    },
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_niwakeupmode_error     },
+    {   0,              NULL                                              }
+};
+#endif
+
+#ifdef _OS81110_SSO
+/*
+------------------------------------------------------------------------------
+    INIC.SSOResult.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_sso_result_status[] =
+{
+    VmsvHandleSSOResultStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.SSOResult.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_sso_result_error[] =
+{
+    VmsvHandleSSOResultError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.SSOResult
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_sso_result[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_sso_result_status    },
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_sso_result_error     },
+    {   0,              NULL                                              }
+};
+#endif
+
+#endif  /* VMSV_MIN */
+#ifdef SCM_MIN
+
+/*
+------------------------------------------------------------------------------
+    INIC.XXX.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_scm_error[] =
+{
+    ScmHandleError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.OpenPort.Result
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_open_port_result[] =
+{
+    ScmHandleResult,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.OpenPort
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_open_port[] =
+{
+    {   OP_RESULT,   (_CONST TMisHandlerFuncPtr *) &inic_open_port_result  },
+    {   OP_ERROR,    (_CONST TMisHandlerFuncPtr *) &inic_scm_error         },
+    {   0,           NULL                                           }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.ClosePort.Result
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_close_port_result[] =
+{
+    ScmHandleResult,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.ClosePort
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_close_port[] =
+{
+    {   OP_RESULT,   (_CONST TMisHandlerFuncPtr *) &inic_close_port_result },
+    {   OP_ERROR,    (_CONST TMisHandlerFuncPtr *) &inic_scm_error         },
+    {   0,           NULL                                           }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.CreateSocket.Result
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_create_socket_result[] =
+{
+    ScmHandleCreateSocketResult,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.CreateSocket
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_create_socket[] =
+{
+    {   OP_RESULT,   (_CONST TMisHandlerFuncPtr *) &inic_create_socket_result  },
+    {   OP_ERROR,    (_CONST TMisHandlerFuncPtr *) &inic_scm_error             },
+    {   0,           NULL                                               }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.DestroySocket.Result
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_destroy_socket_result[] =
+{
+    ScmHandleResult,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.DestroySocket
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_destroy_socket[] =
+{
+    {   OP_RESULT,   (_CONST TMisHandlerFuncPtr *) &inic_destroy_socket_result },
+    {   OP_ERROR,    (_CONST TMisHandlerFuncPtr *) &inic_scm_error             },
+    {   0,           NULL                                               }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.ConnectSockets.Result
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_connect_sockets_result[] =
+{
+    ScmHandleConnectSocketsResult,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.ConnectSockets
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_connect_sockets[] =
+{
+    {   OP_RESULT,   (_CONST TMisHandlerFuncPtr *) &inic_connect_sockets_result },
+    {   OP_ERROR,    (_CONST TMisHandlerFuncPtr *) &inic_scm_error              },
+    {   0,           NULL                                                }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.DisconnectSockets.Result
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_disconnect_sockets_result[] =
+{
+    ScmHandleResult,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.DisconnectSockets
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_disconnect_sockets[] =
+{
+    {   OP_RESULT, (_CONST TMisHandlerFuncPtr *) &inic_disconnect_sockets_result },
+    {   OP_ERROR,  (_CONST TMisHandlerFuncPtr *) &inic_scm_error                 },
+    {   0,         NULL                                                   }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.MuteMode.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_mute_mode_status[] =
+{
+    ScmHandleMuteModeStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.MuteMode
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_mute_mode[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_mute_mode_status  },
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_scm_error         },
+    {   0,              NULL                                           }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.SCDemute.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_sc_demute_status[] =
+{
+  ScmHandleSCDemuteStatus,
+  NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.SCDemute
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_sc_demute[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_sc_demute_status  },
+    {   0,              NULL                                                  }
+};
+
+
+/*
+------------------------------------------------------------------------------
+    INIC.MlbAllocOnly.Result
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_mlb_alloc_only_result[] =
+{
+    ScmHandleMlbAllocOnlyResult,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.MlbAllocOnly
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_mlb_alloc_only[] =
+{
+    {   OP_RESULT,   (_CONST TMisHandlerFuncPtr *) &inic_mlb_alloc_only_result },
+    {   OP_ERROR,    (_CONST TMisHandlerFuncPtr *) &inic_scm_error             },
+    {   0,           NULL                                               }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.MlbDeallocOnly.Result
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_mlb_dealloc_only_result[] =
+{
+    ScmHandleResult,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.MlbDeallocOnly
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_mlb_dealloc_only[] =
+{
+    {   OP_RESULT,   (_CONST TMisHandlerFuncPtr *) &inic_mlb_dealloc_only_result },
+    {   OP_ERROR,    (_CONST TMisHandlerFuncPtr *) &inic_scm_error               },
+    {   0,           NULL                                                 }
+};
+
+
+
+/*
+------------------------------------------------------------------------------
+    INIC.MuteConnection.Result
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_mute_connection_result[] =
+{
+    ScmHandleResult,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.MuteConnection
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_mute_connection[] =
+{
+    {   OP_RESULT,   (_CONST TMisHandlerFuncPtr *) &inic_mute_connection_result },
+    {   OP_ERROR,    (_CONST TMisHandlerFuncPtr *) &inic_scm_error              },
+    {   0,           NULL                                                }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.DemuteConnection.Result
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_demute_connection_result[] =
+{
+    ScmHandleResult,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.DemuteConnection
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_demute_connection[] =
+{
+    {   OP_RESULT, (_CONST TMisHandlerFuncPtr *) &inic_demute_connection_result  },
+    {   OP_ERROR,  (_CONST TMisHandlerFuncPtr *) &inic_scm_error                 },
+    {   0,         NULL                                                   }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.Boundary.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_boundary_status[] =
+{
+    ScmHandleBandwidthStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.Boundary
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_boundary[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_boundary_status   },
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_scm_error         },
+    {   0,              NULL                                           }
+};
+
+
+/*
+------------------------------------------------------------------------------
+    INIC.SourceDrop.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_source_drop_status[] =
+{
+    ScmHandleSourceDropStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.SourceDrop
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_source_drop[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_source_drop_status },
+    {   0,              NULL                                            }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.SCError.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_scerror_status[] =
+{
+    ScmHandleSCErrorStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.SCError
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_scerror[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_scerror_status    },
+    {   0,              NULL                                           }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.RemoteGetSource.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_remote_get_source_status[] =
+{
+    ScmHandleRemoteGetSourceStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.RemoteGetSource.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_remote_get_source_error[] =
+{
+    ScmHandleError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.RemoteGetSource
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_remote_get_source[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_remote_get_source_status },
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_remote_get_source_error  },
+    {   0,              NULL                                                  }
+};
+
+#endif
+
+#ifdef MCS_MIN
+/*
+------------------------------------------------------------------------------
+    INIC.NumCodingErrors.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_num_coding_errors_status[] =
+{
+    WmcsHandleCodingErrorsStatus,
+    #ifdef VMSV_97
+    VmsvHandleCodingErrorsStatus,
+    #endif
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.NumCodingErrors
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_num_coding_errors[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_num_coding_errors_status },
+    {   0,              NULL                                                  }
+};
+
+
+
+/*
+------------------------------------------------------------------------------
+    INIC.Memory.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_memory_status[] =
+{
+    WmcsHandleMemoryStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.Memory.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_memory_error[] =
+{
+    WmcsHandleMemoryError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.Memory
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_memory[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_memory_status },
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_memory_error },
+    {   0,              NULL                                                  }
+};
+
+
+
+
+/*
+------------------------------------------------------------------------------
+    INIC.ConfStringRead.Result
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_conf_string_result[] =
+{
+    WmcsHandleConfStringResult,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.ConfStringRead.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_conf_string_error[] =
+{
+    WmcsHandleConfStringError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.ConfStringRead
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_conf_string[] =
+{
+    {   OP_RESULT,      (_CONST TMisHandlerFuncPtr *) &inic_conf_string_result },
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_conf_string_error },
+    {   0,              NULL                                                  }
+};
+
+
+
+
+
+#if (defined MEP_MIN) && (defined _OS81110_MEP)
+/*
+------------------------------------------------------------------------------
+    INIC.MEPFilterMode.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_mepfiltermode_status[] =
+{
+    WmcsHandleMEPFilterModeStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.MEPFilterMode.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_mepfiltermode_error[] =
+{
+    WmcsHandleMEPFilterModeError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.MEPFilterMode
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_mepfiltermode[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_mepfiltermode_status },
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_mepfiltermode_error  },
+    {   0,              NULL                                                    }
+};
+
+
+/*
+------------------------------------------------------------------------------
+    INIC.MEPHashTable.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_mephashtable_status[] =
+{
+    WmcsHandleMEPHashTableStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.MEPHashTable.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_mephashtable_error[] =
+{
+    WmcsHandleMEPHashTableError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.MEPHashTable
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_mephashtable[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_mephashtable_status },
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_mephashtable_error  },
+    {   0,              NULL                                                    }
+};
+
+
+/*
+------------------------------------------------------------------------------
+    INIC.SetEUI48.Result
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_seteui48_status[] =
+{
+    WmcsHandleSetEUI48Result,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.SetEUI48.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_seteui48_error[] =
+{
+    WmcsHandleSetEUI48Error,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.SetEUI48
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_seteui48[] =
+{
+    {   OP_RESULT,      (_CONST TMisHandlerFuncPtr *) &inic_seteui48_status },
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_seteui48_error  },
+    {   0,              NULL                                                    }
+};
+#endif
+
+#ifdef _OS81110_PCK_LLR
+/*
+------------------------------------------------------------------------------
+    INIC.PacketRetryTime.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_packetretrytime_status[] =
+{
+    WmcsHandlePacketRetryTimeStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.PacketRetryTime.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_packetretrytime_error[] =
+{
+    WmcsHandlePacketRetryTimeError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.PacketRetryTime
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_packetretrytime[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_packetretrytime_status },
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_packetretrytime_error  },
+    {   0,              NULL                                                    }
+};
+#endif  /* end of _OS81110_PCK_LLR */
+#endif
+
+#ifdef AMS_MIN
+/*
+------------------------------------------------------------------------------
+    INIC.RetryOptions.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_retry_options_status[] =
+{
+    MsgHandleRetryOptionsStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.RetryOptions.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_retry_options_error[] =
+{
+    MsgHandleRetryError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.RetryOptions
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_retry_options[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_retry_options_status },
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_retry_options_error  },
+    {   0,              NULL                                              }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.AbilityToSegement.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_ability_to_segment_status[] =
+{
+    MsgHandleAbilityToSegmentStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.AbilityToSegment.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_ability_to_segment_error[] =
+{
+    MsgHandleAbilityToSegmentError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.AbilityToSegment
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_ability_to_segment[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_ability_to_segment_status },
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &inic_ability_to_segment_error  },
+    {   0,              NULL                                                   }
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.MidLevelRetries.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr inic_mid_level_retries_status[] =
+{
+    MsgHandleMidLevelRetriesStatus,
+    PmsHandleMidLevelRetriesStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    INIC.MidLevelRetries
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation inic_mid_level_retries[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &inic_mid_level_retries_status  },
+    {   0,              NULL                                                   }
+};
+#endif
+
+/* lint -restore */
+/*
+------------------------------------------------------------------------------
+    INIC
+------------------------------------------------------------------------------
+*/
+_CONST TMisFunction inic_handler_table[] =
+{
+#ifndef PACKET_COMMUNICATION_ONLY
+    {   FUNCID_INIC_WATCHDOGMODE,           &inic_watchdogmode[0]           },
+#endif
+
+#if (defined MNS_MIN) && (!defined MNS_AVOID_ATTACH)
+    {   FUNCID_INIC_REMOTEACCESS,           &inic_remote_access[0]          },
+    {   FUNCID_INIC_BIST,                   &inic_bist[0]                   },
+    {   FUNCID_INIC_EHCISTATE,              &inic_ehcistate[0]              },
+    {   FUNCID_INIC_VERSIONINFO,            &inic_versioninfo[0]            },
+#endif
+
+#ifdef VMSV_MIN
+    {   FUNCID_INIC_NISTATE,                &inic_nistate[0]                },
+    {   FUNCID_INIC_DEVICEMODE,             &inic_devmode[0]                },
+    {   FUNCID_INIC_LOCKSTATE,              &inic_lockstate[0]              },
+    {   FUNCID_INIC_NCEDELAYED,             &inic_ncedelayed[0]             },
+    {   FUNCID_INIC_NIEVENT,                &inic_nievent[0]                },
+    {   FUNCID_INIC_NCSTATE,                &inic_ncstate[0]                },
+    {   FUNCID_INIC_RBDRESULT,              &inic_rbdresult[0]              },
+    {   FUNCID_INIC_NWSTARTUP,              &inic_nwstartup[0]              },
+    {   FUNCID_INIC_NWSHUTDOWN,             &inic_nwshutdown[0]             },
+    {   FUNCID_INIC_PMISTATE,               &inic_pmistate[0]               },
+    {   FUNCID_INIC_SYSERRMONITOR,          &inic_sys_err_monitor[0]        },
+    {   FUNCID_INIC_NETONTIMER,             &inic_net_on_timer[0]           },
+  #ifdef MSV_DIAG_RESULT_MSG
+    {   FUNCID_INIC_NIWAKEUPMODE,           &inic_niwakeupmode[0]           },
+  #endif
+
+  #ifdef _OS81110_SSO
+    {   FUNCID_INIC_SSORESULT,              &inic_sso_result[0]             },
+  #endif
+#endif
+
+#ifdef SCM_MIN
+    {   FUNCID_INIC_OPENPORT,               &inic_open_port[0]              },
+    {   FUNCID_INIC_CLOSEPORT,              &inic_close_port[0]             },
+    {   FUNCID_INIC_CREATESOCKET,           &inic_create_socket[0]          },
+    {   FUNCID_INIC_DESTROYSOCKET,          &inic_destroy_socket[0]         },
+    {   FUNCID_INIC_CONNECTSOCKETS,         &inic_connect_sockets[0]        },
+    {   FUNCID_INIC_DISCONNECTSOCKETS,      &inic_disconnect_sockets[0]     },
+    {   FUNCID_INIC_MUTEMODE,               &inic_mute_mode[0]              },
+    {   FUNCID_INIC_MEDIALBALLOCATEONLY,    &inic_mlb_alloc_only[0]         },
+    {   FUNCID_INIC_MEDIALBDEALLOCATEONLY,  &inic_mlb_dealloc_only[0]       },
+    {   FUNCID_INIC_MUTECONNECTION,         &inic_mute_connection[0]        },
+    {   FUNCID_INIC_DEMUTECONNECTION,       &inic_demute_connection[0]      },
+    {   FUNCID_INIC_BANDWIDTH,              &inic_boundary[0]               },
+    {   FUNCID_INIC_SOURCEDROP,             &inic_source_drop[0]            },
+    {   FUNCID_INIC_SCERROR,                &inic_scerror[0]                },
+    {   FUNCID_INIC_REMOTEGETSOURCE,        &inic_remote_get_source[0]      },
+    {   FUNCID_INIC_SCDEMUTE,               &inic_sc_demute[0]              },
+#endif
+
+#ifdef MCS_MIN
+    {   FUNCID_INIC_NUMCODINGERRORS,        &inic_num_coding_errors[0]      },
+    {   FUNCID_INIC_MEMORY,                 &inic_memory[0]                 },
+    {   FUNCID_INIC_CONF_STRING,            &inic_conf_string[0]            },
+ #if (defined MEP_MIN) && (defined _OS81110_MEP)
+    {   FUNCID_INIC_MEPFILTERMODE,          &inic_mepfiltermode[0]          },
+    {   FUNCID_INIC_MEPHASHTABLE,           &inic_mephashtable[0]           },
+    {   FUNCID_INIC_SETEUI48,               &inic_seteui48[0]               },
+ #endif
+
+ #ifdef _OS81110_PCK_LLR
+    {   FUNCID_INIC_PACKETRETRYTIME,        &inic_packetretrytime[0]        },
+ #endif
+#endif
+
+#ifdef AMS_MIN
+    {   FUNCID_INIC_RETRYOPTIONS,           &inic_retry_options[0]          },
+    {   FUNCID_INIC_ABILITYTOSEGMENT,       &inic_ability_to_segment[0]     },
+    {   FUNCID_INIC_MIDLEVELRETRY,          &inic_mid_level_retries[0]      },
+#endif
+    {   0,                              NULL                                }
+};
+

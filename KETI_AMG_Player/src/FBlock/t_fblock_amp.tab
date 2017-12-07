@@ -1,0 +1,328 @@
+/**************************************************************************
+* Oasis SiliconSystems (c) 2003
+*
+* The copyright of the computer program(s) herein is the property
+* of Oasis SiliconSystems, Germany.
+* The program(s) may be used and copied only with written permission
+* from Oasis SiliconSystems, or in accordance with the terms and
+* conditions stipulated in the agreement under which the program(s) have
+* been supplied.
+*
+* Project, Module: 	AppWave - Validation82 board based
+*				   	Realization of FBlock Amplifier
+*
+* Filename: 		t_fblock_amp.tab
+*
+* Description: 		Table of available Functions, Operations,
+*					and Notification Descriptions of FBlock Amplifier
+*
+* Author(s): 		Adapted by GW
+*
+**************************************************************************/
+
+
+
+//**********************************************************************************************************//
+//																			   				    			//
+//									 	Operation Tables					   				    			//
+//																			   				    			//
+//**********************************************************************************************************//
+
+
+
+
+//----------------------------------------------------------------------------------------------------------------------//
+//		Table of available Operations of		FBlock:   Amplifier														//
+//				 						 		Function: Function-ID's													//
+//----------------------------------------------------------------------------------------------------------------------//
+//	   	OP_TYPE				|	Flags	|	Ptr for write access		|	Ptr for read access			| Length Check  //
+//----------------------------------------------------------------------------------------------------------------------//
+																														//
+const struct Op_L_Type Op_Amp_FuncIDs[] = 																				//
+	{																													//
+	    {OP_GET, 			 0x01,		    0,			 					NS_F_V Amp_FuncIDs_Get,			LC_NO	},	//
+		{OP_TERMINATION,		0,			0,								0,								LC_NO	}  	//
+	};																													//
+//----------------------------------------------------------------------------------------------------------------------//
+
+
+
+//----------------------------------------------------------------------------------------------------------------------//
+//		Table of available Operations of		FBlock:   Amplifier														//
+//				 						 		Function: Notification													//
+//----------------------------------------------------------------------------------------------------------------------//
+//	   	OP_TYPE				|	Flags	|	Ptr for write access		|	Ptr for read access			| Length Check  //
+//----------------------------------------------------------------------------------------------------------------------//
+//																														//
+const struct Op_L_Type Op_Amp_Notification[] =											  								//
+	{																							        				//
+	    {OP_SET,				0xD0,		NS_F_V Amp_Notification_Set,	0,								LC_NO	},	//
+		{OP_GET,    			0x02,		0,			 					NS_F_V Amp_Notification_Get, 	LC_NO	},	//
+		{OP_TERMINATION,		0,			0,								0, 								LC_NO	}	//
+	};																													//
+//----------------------------------------------------------------------------------------------------------------------//
+
+
+
+//----------------------------------------------------------------------------------------------------------------------//
+//		Table of available Operations of		FBlock:   Amplifier					       			        			//
+//				 						 		Function: NotificationCheck							        			//
+//----------------------------------------------------------------------------------------------------------------------//
+//	   	OP_TYPE				|	Flags	|	Ptr for write access		|	Ptr for read access			| Length Check  //
+//----------------------------------------------------------------------------------------------------------------------//
+//																														//
+const struct Op_L_Type Op_Amp_NotificationCheck[] =											  							//
+	{																													//
+	 	{OP_GET,    			0x02,		0,			 				NS_F_V Amp_NotificationCheck_Get, 	LC_NO	},	//
+		{OP_TERMINATION,		0,			0,							0, 									LC_NO   }	//
+	};																													//
+//----------------------------------------------------------------------------------------------------------------------//
+
+
+//----------------------------------------------------------------------------------------------------------------------//
+//		Table of available Operations of		FBlock:   Amplifier														//
+//				 						 		Function: FBlockInfo													//
+//----------------------------------------------------------------------------------------------------------------------//
+//	   	OP_TYPE				|	Flags	|	Ptr for write access		|	Ptr for read access			| Length Check  //
+//----------------------------------------------------------------------------------------------------------------------//
+																														//
+const struct Op_L_Type Op_Amp_FBlockInfo[] =											  								//
+	{																													//
+  		{ OP_GET,          		0x02, 		0,                          	NS_F_V Amp_FBlockInfo_Get,	    LC_EQ(2)}, 	//
+		{OP_TERMINATION,		0,			0,								0, 								LC_NO	} 	//
+	};																													//
+//----------------------------------------------------------------------------------------------------------------------//
+
+
+
+//----------------------------------------------------------------------------------------------------------------------//
+//		Table of available Operations of		FBlock:   Amplifier														//
+//				 						 		Function: SinkInfo														//
+//----------------------------------------------------------------------------------------------------------------------//
+//	   	OP_TYPE				|	Flags	|	Ptr for write access		|	Ptr for read access			| Length Check  //
+//----------------------------------------------------------------------------------------------------------------------//
+																														//
+const struct Op_L_Type Op_Amp_SinkInfo[] =												  								//
+	{																													//
+	    {OP_GET,    			0x02,		0,			 					NS_F_V Amp_SinkInfo_Get, 		LC_EQ(1)},	//
+		{OP_TERMINATION,		0,			0,								0, 								LC_NO	} 	//
+	};																													//
+//----------------------------------------------------------------------------------------------------------------------//
+
+
+
+//----------------------------------------------------------------------------------------------------------------------//
+//		Table of available Operations of		FBlock:   Amplifier														//
+//				 						 		Function: Connect														//
+//----------------------------------------------------------------------------------------------------------------------//
+//	   	OP_TYPE				|	Flags	|	Ptr for write access		|	Ptr for read access			| Length Check  //
+//----------------------------------------------------------------------------------------------------------------------//
+																														//
+const struct Op_L_Type Op_Amp_Connect[] =																				//																						//
+	{																													//
+	    {OP_STARTRESULT,		0xD0,		NS_F_V Amp_Connect_StartResult,		0,							LC_EQ(6)},	//
+		{OP_STARTRESULTACK,		0xD0,		NS_F_V Amp_Connect_StartResultACK,		0,							LC_EQ(7)},
+		{OP_TERMINATION,		0,			0,							  		0,  						LC_NO	} 	//
+	};																													//
+//----------------------------------------------------------------------------------------------------------------------//
+
+
+
+//----------------------------------------------------------------------------------------------------------------------//
+//		Table of available Operations of		FBlock:   Amplifier														//
+//				 						 		Function: DisConnect		 											//
+//----------------------------------------------------------------------------------------------------------------------//
+//	   	OP_TYPE				|	Flags	|	Ptr for write access		|	Ptr for read access			| Length Check  //
+//----------------------------------------------------------------------------------------------------------------------//
+																														//
+const struct Op_L_Type Op_Amp_DisConnect[] = 																			//																							//
+	{																													//
+	    {OP_STARTRESULT,		0xD0,		NS_F_V Amp_DisConnect_StartResult,	0,							LC_EQ(1)},	//
+		{OP_STARTRESULTACK,		0xD0,		NS_F_V Amp_DisConnect_StartResultACK,	0,						LC_EQ(3)},	//
+		{OP_TERMINATION,		0,			0,							   		0,							LC_NO	}	//
+	};																													//
+//----------------------------------------------------------------------------------------------------------------------//
+
+
+
+//----------------------------------------------------------------------------------------------------------------------//
+//		Table of available Operations of		FBlock:   Amplifier														//
+//				 						 		Function: Mute 															//
+//----------------------------------------------------------------------------------------------------------------------//
+//	   	OP_TYPE				|	Flags	|	Ptr for write access		|	Ptr for read access			| Length Check  //
+//----------------------------------------------------------------------------------------------------------------------//
+																														//
+const struct Op_L_Type Op_Amp_Mute[] =																					//
+	{																													//
+	    {OP_SET,				0xD0,		NS_F_V Amp_Mute_Set,		   	0,								LC_EQ(2)},	//
+		{OP_GET, 			    0x02,		0, 								NS_F_V Amp_Mute_Get,			LC_EQ(1)},	//
+		{OP_SETGET,			    0xD1,		NS_F_V Amp_Mute_Set,  			NS_F_V Amp_Mute_Get_N,			LC_EQ(2)},	//
+		{OP_TERMINATION,	       0,		0,								0,								LC_NO	}	//
+	};																													//
+//----------------------------------------------------------------------------------------------------------------------//
+
+
+
+//----------------------------------------------------------------------------------------------------------------------//
+//		Table of available Operations of		FBlock:   Amplifier														//
+//				 						 		Function: SinkName														//
+//----------------------------------------------------------------------------------------------------------------------//
+//	   	OP_TYPE				|	Flags	|	Ptr for write access		|	Ptr for read access			| Length Check  //
+//----------------------------------------------------------------------------------------------------------------------//
+																														//
+const struct Op_L_Type Op_Amp_SinkName[] =												  								//
+	{																													//
+	    {OP_GET, 		    	0x02,		0,			 					NS_F_V Amp_SinkName_Get,		LC_EQ(1)},	//
+		{OP_TERMINATION,		0,			0,								0,								LC_NO	}	//
+	};																													//
+//----------------------------------------------------------------------------------------------------------------------//
+
+
+
+//----------------------------------------------------------------------------------------------------------------------//
+//		Table of available Operations of		FBlock:   Amplifier														//
+//				 						 		Function: SinkDataInfo													//
+//----------------------------------------------------------------------------------------------------------------------//
+//	   	OP_TYPE				|	Flags	|	Ptr for write access		|	Ptr for read access			| Length Check  //
+//----------------------------------------------------------------------------------------------------------------------//
+																														//
+const struct Op_L_Type Op_Amp_SyncDataInfo[] =												  							//
+	{																													//
+	    {OP_GET,    			0x02,		0,			 					NS_F_V Amp_SyncDataInfo_Get,	LC_EQ(0)},	//
+		{OP_TERMINATION,		0,			0,								0,								LC_NO	}	//
+	};																													//
+//----------------------------------------------------------------------------------------------------------------------//
+
+
+
+//----------------------------------------------------------------------------------------------------------------------//
+//		Table of available Operations of		FBlock:   Amplifier														//
+//				 						 		Function: Volume		 												//
+//----------------------------------------------------------------------------------------------------------------------//
+//	   	OP_TYPE				|	Flags	|	Ptr for write access		|	Ptr for read access			| Length Check  //
+//----------------------------------------------------------------------------------------------------------------------//
+																														//
+const struct Op_L_Type Op_Amp_Volume[] =																				//
+	{																													//
+	    {OP_SET,				0xD0,		NS_F_V Amp_Volume_Set,  		0,								LC_EQ(1)},	//
+		{OP_GET, 			    0x04,		0, 								NS_F_V &Amp.pVolume,			LC_NO	},	//
+		{OP_SETGET,			    0xD4,		NS_F_V Amp_Volume_Set,  		NS_F_V &Amp.pVolume,			LC_EQ(1)},	//
+		{OP_INC,				0xD4,		NS_F_V Amp_Volume_Inc,  		NS_F_V &Amp.pVolume,			LC_EQ(1)},	//
+		{OP_DEC,				0xD4,		NS_F_V Amp_Volume_Dec,  		NS_F_V &Amp.pVolume,			LC_EQ(1)},	//
+		{OP_TERMINATION,		0,			0,								0,								LC_NO	}	//
+	};																													//
+//----------------------------------------------------------------------------------------------------------------------//
+
+//----------------------------------------------------------------------------------------------------------------------//
+//		Table of available Operations of		FBlock:   Amplifier														//
+//				 						 		Function: Events		 												//
+//----------------------------------------------------------------------------------------------------------------------//
+//	   	OP_TYPE				|	Flags	|	Ptr for write access		|	Ptr for read access			| Length Check  //
+//----------------------------------------------------------------------------------------------------------------------//
+																														//
+const struct Op_L_Type Op_Amp_Events[] =																				//
+	{																													//
+	    {OP_SET,				0xD0,		NS_F_V Amp_Events_Set,  	   	0,								LC_EQ(3)},	//
+		{OP_GET, 			    0x02,		0, 								NS_F_V Amp_Events_Get,			LC_EQ(0)},	//
+		{OP_SETGET,			    0xD2,		NS_F_V Amp_Events_Set,  	   	NS_F_V Amp_Events_Get,			LC_EQ(3)},	//
+		{OP_TERMINATION,		0,			0,								0,								LC_NO	}	//
+	};																													//
+//----------------------------------------------------------------------------------------------------------------------//
+
+
+
+//----------------------------------------------------------------------------------------------------------------------//
+//		Table of available Operations of		FBlock:   Amplifier														//
+//				 						 		Function: Temperature 													//
+//----------------------------------------------------------------------------------------------------------------------//
+//	   	OP_TYPE				|	Flags	|	Ptr for write access		|	Ptr for read access			| Length Check  //
+//----------------------------------------------------------------------------------------------------------------------//
+																														//
+const struct Op_L_Type Op_Amp_Temperature[] =												  							//
+	{																													//
+	    {OP_GET,    			0x04,		0,			 					NS_F_V &Amp.pTemperature,		LC_NO	},	//
+		{OP_TERMINATION,		0,			0,								0,	LC_NO				 				}	//
+	};																													//
+//----------------------------------------------------------------------------------------------------------------------//
+
+
+
+
+
+
+//**************************************************************************************//
+//																			   			//
+//							 			Function Table						   			//
+//																			   			//
+//**************************************************************************************//
+
+
+
+
+//--------------------------------------------------------------------------------------//
+//		Table of available FktIDs of FBlock												//
+//				 						 												//
+//--------------------------------------------------------------------------------------//
+//	   	FktID							|	Ptr on table with OP_Types		 			//
+//										|   						   		 			//
+//--------------------------------------------------------------------------------------//
+																						//
+const struct Func_L_Type Func_Amp[] =													//
+	{																					//
+		{FUNC_FKTIDS,					&Op_Amp_FuncIDs[0]          	},				//
+		{FUNC_NOTIFICATION, 			&Op_Amp_Notification[0]     	}, 				//
+		{FUNC_NOTIFICATIONCHECK,    	&Op_Amp_NotificationCheck[0]	},				//
+		{FUNC_FBLOCKINFO,				&Op_Amp_FBlockInfo[0]			},				//
+		{FUNC_SINKINFO,					&Op_Amp_SinkInfo[0]         	},				//
+		{FUNC_CONNECT,					&Op_Amp_Connect[0]          	},				//
+		{FUNC_DISCONNECT,				&Op_Amp_DisConnect[0]       	},				//
+		{FUNC_MUTE,						&Op_Amp_Mute[0]             	},				//
+		{FUNC_SINKNAME,					&Op_Amp_SinkName[0]         	},	    		//
+		{FUNC_SYNCDATAINFO,         	&Op_Amp_SyncDataInfo[0]     	},				//
+		{AMP_VOLUME,					&Op_Amp_Volume[0]           	},				//
+		{AMP_EVENTS,					&Op_Amp_Events[0]         		},				//
+		{AMP_TEMPERATURE,				&Op_Amp_Temperature[0]         	},				//
+																						//
+		{FUNC_TERMINATION, 				0  								}				//
+	};																					//
+//--------------------------------------------------------------------------------------//
+
+
+
+
+
+//**********************************************************************************************************//
+//																					 		    			//
+//							 			Notification Table							 	  	    			//
+//																					 		    			//
+//**********************************************************************************************************//
+
+
+
+
+#ifdef NTF_MIN
+
+#ifndef NTF_ADD1
+//----------------------------------------------------------------------------------------------------------//
+//						  	Table of all Properties of FBlock						   						//
+//					which have to be serviced by the Notification Service			  						//
+//																					  						//
+//----------------------------------------------------------------------------------------------------------//
+//	Flags / FuncID					|	Base Addr of		|	Pointer at		   		|	Pointer at		//
+//			   						|	Notification		|	Property		   		|	Property		//
+//									|	Matrix				|					   		|	Reference		//
+//----------------------------------------------------------------------------------------------------------//
+//																					  						//
+TNtfPropL NtfPropTabAmp[] =	         													  					//
+ {																				  							//
+	{ NTF_IND 		| FUNC_SINKINFO, 	&NtfMatrix_Amp[0][0],	NS_F_V &Amp_SinkInfo_Get_N   			},	//
+	{ NTF_IND 		| AMP_MUTE,      	&NtfMatrix_Amp[1][0],	NS_F_V &Amp_Mute_Get_N      			},	//
+	{ NTF_BYTE 		| AMP_VOLUME,		&NtfMatrix_Amp[2][0],	NS_F_V &Amp.pVolume         			},	//
+	{ NTF_BYTE 		| AMP_TEMPERATURE,	&NtfMatrix_Amp[3][0],	NS_F_V &Amp.pTemperature    			},	//
+	{ NTF_IND 		| AMP_EVENTS,      	&NtfMatrix_Amp[4][0],	NS_F_V &Amp_Events_Get_N    			},	//
+	{ NTF_TERMINATION,					0,						0 										}	//
+ };																  											//
+//----------------------------------------------------------------------------------------------------------//
+#endif
+
+#endif

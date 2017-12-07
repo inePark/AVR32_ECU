@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type='text/xsl' href='ConversionLog.xslt'?>
+<conversion conversiontitle="Upgrade Report - Atmel Software Framework Upgrade Log" subtitle1="Upgrading Modules From" subtitle2="to" date="2014년 12월 11일 목요일" time="오후 3:32">
+  <general>
+    <log timestamp="12-11-2014 15-32-44">
+      <message>Unloading project</message>
+    </log>
+    <log timestamp="12-11-2014 15-32-44">
+      <message>Project unload complete.</message>
+    </log>
+    <log timestamp="12-11-2014 15-32-49">
+      <message>Backing up of project started.</message>
+    </log>
+    <log timestamp="12-11-2014 15-32-50">
+      <message>Project backup completed.</message>
+    </log>
+    <log timestamp="12-11-2014 15-32-50">
+      <message>Reloading project after backup.</message>
+    </log>
+    <log timestamp="12-11-2014 15-32-53">
+      <message>Project reload complete.</message>
+    </log>
+    <log timestamp="12-11-2014 15-32-53">
+      <message>Upgrading of project started.</message>
+    </log>
+    <log timestamp="12-11-2014 15-33-08">
+      <message>Project upgrade failed with error: System.Runtime.InteropServices.COMException (0x80004005): 지정되지 않은 오류입니다. (Exception from HRESULT: 0x80004005 (E_FAIL))
+   at EnvDTE.Configuration.get_ConfigurationName()
+   at Microsoft.VisualStudio.Project.Utilities.GetActiveConfigurationName(Project automationObject)
+   at Microsoft.VisualStudio.Project.ProjectNode.SetCurrentConfiguration()
+   at Microsoft.VisualStudio.Project.ProjectNode.GetMsBuildProperty(String propertyName, Boolean resetCache)
+   at Microsoft.VisualStudio.Project.ProjectNode.GetProjectProperty(String propertyName, Boolean resetCache)
+   at Microsoft.VisualStudio.Project.ProjectNode.GetProjectProperty(String propertyName)
+   at Atmel.VsIde.AvrStudio.Asf.ProjectManagement.Utilities.AsfProject.&lt;GetSelectedModules&gt;b__12(&lt;&gt;f__AnonymousType0`2 &lt;&gt;h__TransparentIdentifierf)
+   at System.Linq.Enumerable.WhereSelectEnumerableIterator`2.MoveNext()
+   at System.Linq.Enumerable.WhereEnumerableIterator`1.MoveNext()
+   at System.Linq.Enumerable.Any[TSource](IEnumerable`1 source)
+   at Atmel.VsIde.AvrStudio.Asf.Navigator.VersionManagement.AsfVersionUpgrader.Upgrade(AsfVersion targetVersion)</message>
+    </log>
+    <log timestamp="12-11-2014 15-33-08">
+      <message>Upgrade failed with error: System.Runtime.InteropServices.COMException (0x80004005): 지정되지 않은 오류입니다. (Exception from HRESULT: 0x80004005 (E_FAIL))
+   at EnvDTE.Configuration.get_ConfigurationName()
+   at Microsoft.VisualStudio.Project.Utilities.GetActiveConfigurationName(Project automationObject)
+   at Microsoft.VisualStudio.Project.ProjectNode.SetCurrentConfiguration()
+   at Microsoft.VisualStudio.Project.ProjectNode.GetMsBuildProperty(String propertyName, Boolean resetCache)
+   at Microsoft.VisualStudio.Project.ProjectNode.GetProjectProperty(String propertyName, Boolean resetCache)
+   at Microsoft.VisualStudio.Project.ProjectNode.GetProjectProperty(String propertyName)
+   at Atmel.VsIde.AvrStudio.Asf.ProjectManagement.Utilities.AsfProject.&lt;GetSelectedModules&gt;b__12(&lt;&gt;f__AnonymousType0`2 &lt;&gt;h__TransparentIdentifierf)
+   at System.Linq.Enumerable.WhereSelectEnumerableIterator`2.MoveNext()
+   at System.Linq.Enumerable.WhereEnumerableIterator`1.MoveNext()
+   at System.Linq.Enumerable.Any[TSource](IEnumerable`1 source)
+   at Atmel.VsIde.AvrStudio.Asf.Navigator.VersionManagement.AsfVersionUpgrader.Upgrade(AsfVersion targetVersion)
+   at Atmel.VsIde.AvrStudio.Asf.Navigator.VersionManagement.AsfVersionUpgradeSequence.Run()</message>
+    </log>
+  </general>
+</conversion>

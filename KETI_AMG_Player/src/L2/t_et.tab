@@ -1,0 +1,538 @@
+/*
+==============================================================================
+
+Project:        MOST NetServices V3 for INIC
+Module:         Table of available Functions and Operations of FBlock:
+                ET 'Enhanced Testability' (FBlockID: 0x0F)
+File:           t_et.tab
+Version:        3.0.x-SR-1  
+Language:       C
+Author(s):      S.Semmler
+Date:           05.January.2011
+
+FileGroup:      Layer II
+Customer ID:    0018FF2A0300xx.N.KETI
+FeatureCode:    FCR1
+------------------------------------------------------------------------------
+
+                (c) Copyright 1998-2011
+                SMSC
+                All Rights Reserved
+
+------------------------------------------------------------------------------
+
+
+
+Modifications
+~~~~~~~~~~~~~
+Date    By      Description
+
+==============================================================================
+*/
+
+#ifndef _T_ET_TAB
+#define _T_ET_TAB
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: AutoWakeup (0x201)           |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_AUTOWAKEUP
+TOpL Op_ET_AutoWakeup[] =
+{
+  { OP_SET,          (byte)0xD0, NS_F_V ET_AutoWakeup_Set,  NULL,                      LC_EQ(4) },
+  { OP_GET,          (byte)0x01, NULL,                      NS_F_V ET_AutoWakeup_Get,  LC_EQ(0) },
+  { OP_SETGET,       (byte)0xD1, NS_F_V ET_AutoWakeup_Set,  NS_F_V ET_AutoWakeup_Get,  LC_EQ(4) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                      NULL,                      LC_NO    }
+};
+#endif
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: DiagResult (0x203)           |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_DIAGRESULT
+TOpL Op_ET_DiagResult[] =
+{
+  { OP_GET,          (byte)0x04, NULL,                      NS_F_V &ET_DiagResult,    LC_EQ(0) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                      NULL,                     LC_NO    }
+};
+#endif
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: Shutdown (0x204)             |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_SHUTDOWN
+TOpL Op_ET_Shutdown[] =
+{
+  { OP_START,        (byte)0xD0, NS_F_V ET_Shutdown,        NULL,                       LC_EQ(1) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                      NULL,                       LC_NO    }
+};
+#endif
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: ShutdownSuspendMode (0x205)  |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_SHUTDOWNSUSPENDMODE
+TOpL Op_ET_SuspMode[] =
+{
+  { OP_SET,          (byte)0xD0, NS_F_V ET_SuspMode_Set,    NULL,                     LC_EQ(1) },
+  { OP_GET,          (byte)0x04, NULL,                      NS_F_V &ET_SuspMode,      LC_EQ(0) },
+  { OP_SETGET,       (byte)0xD4, NS_F_V ET_SuspMode_Set,    NS_F_V &ET_SuspMode,      LC_EQ(1) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                      NULL,                     LC_NO    }
+};
+#endif
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: SendMessage (0x207)          |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_SENDMESSAGE
+TOpL Op_ET_SendMessage[] =
+{
+  { OP_STARTRESULT,     (byte)0x90, NS_F_V ET_SendMessage,     NULL,                  LC_GE(0) },
+  { OP_TERMINATION,     (byte)0x00, NULL,                      NULL,                  LC_NO    }
+};
+#endif
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: EchoMessage (0x208)          |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_ECHOMESSAGE
+TOpL Op_ET_EchoMessage[] =
+{
+  { OP_STARTRESULT,  (byte)0xD0, NS_F_V ET_EchoMessage,     NULL,                     LC_GE(0) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                      NULL,                     LC_NO    }
+};
+#endif
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: MessageBufSize (0x209)       |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_MESSAGEBUFSIZE
+TOpL Op_ET_MsgBufSize[] =
+{
+  { OP_GET,          (byte)0x01, NULL,                      NS_F_V ET_MsgBufSize_Get,   LC_EQ(0) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                      NULL,                       LC_NO    }
+};
+#endif
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: CodingErrors (0x20F)         |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_CODINGERRORS
+TOpL Op_ET_CodingErrors[] =
+{
+  { OP_SET,          (byte)0xD0, NS_F_V ET_CodingErrors_Set,    NULL,                         LC_GE(1) },
+  { OP_GET,          (byte)0x01, NULL,                          NS_F_V ET_CodingErrors_Get,   LC_EQ(0) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                          NULL,                         LC_NO    }
+};
+#endif
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: Reset (0x211)                |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_RESET
+TOpL Op_ET_Reset[] =
+{
+  { OP_START,        (byte)0x10, NS_F_V ET_Reset_Start,         NULL,                         LC_EQ(0) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                          NULL,                         LC_NO    }
+};
+#endif
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: CentralRegistrySize (0x212)  |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_CENTRALREGISTRYSIZE
+TOpL Op_ET_CentralRegistrySize[] =
+{
+  { OP_GET,          (byte)0x01, NULL,                          NS_F_V ET_CentralRegistrySize_Get,  LC_EQ(0) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                          NULL,                               LC_NO    }
+};
+#endif
+
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: NotificationMatrxSize(0x213) |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_NOTIFICATIONMATRIXSIZE
+TOpL Op_ET_NtfMatrixSize[] =
+{
+  { OP_GET,          (byte)0x01, NULL,                   NS_F_V ET_NtfMatrixSize_Get,  LC_EQ(0) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                   NULL,                         LC_NO    }
+};
+#endif
+
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: SystemState          (0x216) |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_SYSTEMSTATE
+TOpL Op_ET_SystemState[] =
+{
+  { OP_GET,          (byte)0x01, NULL,                    NS_F_V ET_SystemState_Get, LC_EQ(0) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                    NULL,                      LC_NO    }
+};
+#endif
+
+
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: ECLTrigger           (0x220) |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_ECLTRIGGER
+TOpL Op_ET_ECLTrigger[] =
+{
+  { OP_STARTRESULT,  (byte)0xD0, NS_F_V ET_ECLTrigger_StartResult, NULL,              LC_GE(1) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                             NULL,              LC_NO    }
+};
+#endif
+
+
+
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: ECLInitiatorState    (0x221) |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_ECLINITIATORSTATE
+TOpL Op_ET_ECLInitiatorState[] =
+{
+  { OP_GET,          (byte)0x02, NULL,              NS_F_V ET_ECLInitiatorState_Get, LC_EQ(2) },
+  { OP_TERMINATION,  (byte)0x00, NULL,              NULL,                            LC_NO    }
+};
+#endif
+
+
+
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: DSIDSOCount          (0x3FD) |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_DSIDSOCOUNT
+TOpL Op_ET_DSIDSOCount[] =
+{
+  { OP_GET,          (byte)0xD0, NS_F_V ET_DSIDSOCount_Get, NULL,       LC_EQ(0) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                      NULL,       LC_NO    }
+};
+#endif
+
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: DSO                  (0x3FE) |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_DSO
+TOpL Op_ET_DSO[] =
+{
+  { OP_STARTACK,     (byte)0xD0, NS_F_V ET_DSO_StartAck,   NULL,       LC_EQ(11) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                     NULL,       LC_NO     }
+};
+#endif
+
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: DSIHold              (0x3FF) |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_DSIHOLD
+TOpL Op_ET_DSIHold[] =
+{
+  { OP_STARTACK,     (byte)0xD0, NS_F_V ET_DSIHold_StartAck, NULL,      LC_EQ(4) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                       NULL,      LC_NO    }
+};
+#endif
+
+
+/* ET.DSI interface may be included using the macros */
+/* NS_INC_ET_DSI_OP_TAB and NS_INC_ET_DSI_FUNC_TAB   */
+#ifdef NS_INC_ET_DSI_OP_TAB
+    #include NS_INC_ET_DSI_OP_TAB
+#endif
+
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: Version              (0x010) |
+|                                       Function: Version - Legacy     (0xF00) |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_VERSION
+TOpL Op_ET_Version[] =
+{
+  { OP_GET,          (byte)0x01, NULL,                    NS_F_V ET_Version_Get,              LC_EQ(0) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                    NULL,                               LC_NO    }
+};
+#endif
+
+
+/*-------------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock:   Enhanced Testability (0x0F)              */
+/*                                              Function: FBlockInfo                               */
+/*-------------------------------------------------------------------------------------------------*/
+/*    OP_TYPE       |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*                  |          |                         |                         |               */
+/*-------------------------------------------------------------------------------------------------*/
+/*                                                                                                 */
+#ifdef FUNCID_ET_FBLOCKINFO
+_CONST struct Op_L_Type Op_ET_FBlockInfo[] =
+{
+  { OP_GET,          0x02, NULL,                          NS_F_V ET_FBlockInfo_Get,     LC_EQ(2) }, /* ET.FBlockInfo.Get */
+  { OP_TERMINATION,  0x00, NULL,                          NULL,                         LC_NO    }
+};
+#endif
+
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: MOSTRemoteReset (0x217)      |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_MOSTREMOTERESET
+TOpL Op_ET_RReset[] =
+{
+  { OP_SETGET,       (byte)0xD0, NS_F_V ET_RReset_Set,      NULL,      LC_EQ(1) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                      NULL,      LC_NO    }
+};
+#endif
+
+
+
+/*
++------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)  |
+|                                       Function: PhysicalLayerTest (0x218)    |
++-----------------+-----+-------------------------+----------------------------+
+|   OPType        | Flg | Write Access            | Read Access                |
++-----------------+-----+-------------------------+----------------------------+
+*/
+#ifdef FUNCID_ET_PHYSICALLAYERTEST
+TOpL Op_ET_PhysicalLayerTest[] =
+{
+  { OP_STARTRESULTACK, (byte)0xD0, NS_F_V ET_PhysicalLayerTest_Start, NULL,  LC_EQ(11) },
+  { OP_TERMINATION,    (byte)0x00, NULL,                              NULL,  LC_NO     }
+};
+#endif
+
+
+/*
++---------------------------------------------------------------------------------+
+| Table of available operations of ...  FBlock:   Enhanced Testability (0x0F)     |
+|                                       Function: PhysicalLayerTestResult (0x219) |
++-----------------+-----+-------------------------+-------------------------------+
+|   OPType        | Flg | Write Access            | Read Access                   |
++-----------------+-----+-------------------------+-------------------------------+
+*/
+#ifdef FUNCID_ET_PHYSICALLAYERRESULT
+TOpL Op_ET_PhysicalLayerResult[] =
+{
+  { OP_GET,          (byte)0x01, NULL, NS_F_V ET_PhysicalLayer_Result,  LC_EQ(0) },
+  { OP_TERMINATION,  (byte)0x00, NULL,                           NULL,  LC_NO    }
+};
+#endif
+
+
+
+/*
++------------------------------------------------------------------------------+
+| Table of available functions of ...   FBlock:   Enhanced Testability (0x0F)  |
++-------------------------------------+----------------------------------------+
+|   FunctionID                        | Operation table                        |
++-------------------------------------+----------------------------------------+
+
+  !!! The FuncID have to be sorted (see ET.FunctionIDs) !!!
+  =========================================================
+*/
+#ifdef ET_MIN
+TFuncL Func_ET[] =
+{
+#ifdef FUNCID_ET_VERSION
+    { FUNCID_ET_VERSION,                    &Op_ET_Version[0]                    },
+#endif
+
+#ifdef FUNCID_ET_FBLOCKINFO
+    { FUNCID_ET_FBLOCKINFO,                 &Op_ET_FBlockInfo[0]                 },
+#endif
+
+#ifdef FUNCID_ET_AUTOWAKEUP
+    { FUNCID_ET_AUTOWAKEUP,                 &Op_ET_AutoWakeup[0]                 },
+#endif
+
+#ifdef FUNCID_ET_DIAGRESULT
+    { FUNCID_ET_DIAGRESULT,                 &Op_ET_DiagResult[0]                 },
+#endif
+
+#ifdef FUNCID_ET_SHUTDOWN
+    { FUNCID_ET_SHUTDOWN,                   &Op_ET_Shutdown[0]                   },
+#endif
+
+#ifdef FUNCID_ET_SHUTDOWNSUSPENDMODE
+    { FUNCID_ET_SHUTDOWNSUSPENDMODE,        &Op_ET_SuspMode[0]                   },
+#endif
+
+#ifdef FUNCID_ET_SENDMESSAGE
+    { FUNCID_ET_SENDMESSAGE,                &Op_ET_SendMessage[0]                },
+#endif
+
+#ifdef FUNCID_ET_ECHOMESSAGE
+    { FUNCID_ET_ECHOMESSAGE,                &Op_ET_EchoMessage[0]                },
+#endif
+
+#ifdef FUNCID_ET_MESSAGEBUFSIZE
+    { FUNCID_ET_MESSAGEBUFSIZE,             &Op_ET_MsgBufSize[0]                 },
+#endif
+
+#ifdef FUNCID_ET_CODINGERRORS
+    { FUNCID_ET_CODINGERRORS,               &Op_ET_CodingErrors[0]               },
+#endif
+
+#ifdef FUNCID_ET_RESET
+    { FUNCID_ET_RESET,                      &Op_ET_Reset[0]                      },
+#endif
+
+#ifdef FUNCID_ET_CENTRALREGISTRYSIZE
+    { FUNCID_ET_CENTRALREGISTRYSIZE,        &Op_ET_CentralRegistrySize[0]        },
+#endif
+
+#ifdef FUNCID_ET_NOTIFICATIONMATRIXSIZE
+    { FUNCID_ET_NOTIFICATIONMATRIXSIZE,     &Op_ET_NtfMatrixSize[0]              },
+#endif
+
+#ifdef FUNCID_ET_SYSTEMSTATE
+    { FUNCID_ET_SYSTEMSTATE,                &Op_ET_SystemState[0]                },
+#endif
+
+#ifdef FUNCID_ET_MOSTREMOTERESET
+    { FUNCID_ET_MOSTREMOTERESET,            &Op_ET_RReset[0]                     },
+#endif
+
+#ifdef FUNCID_ET_PHYSICALLAYERTEST
+    { FUNCID_ET_PHYSICALLAYERTEST,          &Op_ET_PhysicalLayerTest[0]          },
+#endif
+
+#ifdef FUNCID_ET_PHYSICALLAYERRESULT
+    { FUNCID_ET_PHYSICALLAYERRESULT,       &Op_ET_PhysicalLayerResult[0]         },
+#endif
+
+#ifdef FUNCID_ET_ECLTRIGGER
+    { FUNCID_ET_ECLTRIGGER,                &Op_ET_ECLTrigger[0]                 },
+#endif
+
+#ifdef FUNCID_ET_ECLINITIATORSTATE
+    { FUNCID_ET_ECLINITIATORSTATE,         &Op_ET_ECLInitiatorState[0]          },
+#endif
+
+#ifdef FUNCID_ET_DSIDSOCOUNT
+    { FUNCID_ET_DSIDSOCOUNT,                &Op_ET_DSIDSOCount[0]               },
+#endif
+
+#ifdef FUNCID_ET_DSO
+    { FUNCID_ET_DSO,                        &Op_ET_DSO[0]                        },
+#endif
+
+#ifdef FUNCID_ET_DSIHOLD
+    { FUNCID_ET_DSIHOLD,                    &Op_ET_DSIHold[0]                    },
+#endif
+
+
+/* ET.DSI interface may be included using the macros */
+/* NS_INC_ET_DSI_OP_TAB and NS_INC_ET_DSI_FUNC_TAB   */
+#ifdef NS_INC_ET_DSI_FUNC_TAB
+    #include NS_INC_ET_DSI_FUNC_TAB
+#endif
+
+
+#ifdef FUNCID_ET_VERSION2   /* deprecated, FktCatalog */
+    { FUNCID_ET_VERSION2,                   &Op_ET_Version[0]                    },
+#endif
+
+    { FUNC_TERMINATION,                     NULL                                 }
+};
+#endif /* #ifdef ET_MIN */
+
+#endif /* _T_ET_TAB */

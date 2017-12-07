@@ -1,0 +1,253 @@
+/*
+==============================================================================
+
+Project:        MOST NetServices V3 for INIC
+Module:         Table of available Functions and Operations
+                of FBlock: NetworkMaster Shadow
+File:           T_NM_S.tab
+Version:        3.0.x-SR-1  
+Language:       C
+Author(s):      S.Kerber
+Date:           05.January.2011
+
+FileGroup:      Layer II
+Customer ID:    0018FF2A0300xx.N.KETI
+FeatureCode:    FCR1
+------------------------------------------------------------------------------
+
+                (c) Copyright 1998-2011
+                SMSC
+                All Rights Reserved
+
+------------------------------------------------------------------------------
+
+
+
+Modifications
+~~~~~~~~~~~~~
+Date    By      Description
+
+==============================================================================
+*/
+
+#ifndef _T_NM_S_TAB
+#define _T_NM_S_TAB
+
+
+
+
+/*----------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock:     NetworkMaster                       */
+/*                                              Function:   Configuration                       */
+/*----------------------------------------------------------------------------------------------*/
+/*    OP_TYPE    |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*               |          |                         |                         |               */
+/*----------------------------------------------------------------------------------------------*/
+/*                                                                                              */
+TOpL Op_NM_FktIDs[] =
+    {
+        #ifdef NM_I5C
+      { OP_STATUS,          0x50,       NS_F_V NM_FktIDs_Status,  NULL,         LC_GE(1) }, /* NetworkMaster.FktIDs.Status */
+        #endif
+        #ifdef NM_I5F
+      { OP_ERROR,           0x50,       NS_F_V NM_FktIDs_Error,   NULL,         LC_GE(1) }, /* NetworkMaster.FktIDs.Error */
+        #endif
+      { OP_TERMINATION,     0,          NULL,                     NULL,         LC_NO    }
+};
+
+
+
+/*----------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock:     NetworkMaster                       */
+/*                                              Function:   Configuration                       */
+/*----------------------------------------------------------------------------------------------*/
+/*    OP_TYPE    |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*               |          |                         |                         |               */
+/*----------------------------------------------------------------------------------------------*/
+/*                                                                                              */
+TOpL Op_NM_Configuration[] =
+    {
+        #ifdef NM_I1C
+      { OP_STATUS,          0x50,       NS_F_V NM_Configuration_Status,  NULL,         LC_GE(1) }, /* NetworkMaster.Configuration.Status */
+        #endif
+        #ifdef NM_I1F
+      { OP_ERROR,           0x50,       NS_F_V NM_Configuration_Error,   NULL,         LC_GE(1) }, /* NetworkMaster.Configuration.Error */
+        #endif
+      { OP_TERMINATION,     0,          NULL,                               NULL,         LC_NO    }
+    };
+/*----------------------------------------------------------------------------------------------*/
+
+
+
+
+
+/*----------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock:     NetworkMaster                       */
+/*                                              Function:   CentralRegistry                     */
+/*----------------------------------------------------------------------------------------------*/
+/*    OP_TYPE    |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*               |          |                         |                         |               */
+/*----------------------------------------------------------------------------------------------*/
+/*                                                                                              */
+TOpL Op_NM_CentralReg[] =
+
+    {
+        #ifdef NM_I2C
+      { OP_STATUS,          0x50,       NS_F_V NM_CentralReg_Status,     NULL,         LC_GE(4) }, /* NetworkMaster.CentralRegistry.Status */
+        #endif
+        #ifdef NM_I2F
+      { OP_ERROR,           0x50,       NS_F_V NM_CentralReg_Error,      NULL,         LC_GE(1) }, /* NetworkMaster.CentralRegistry.Error */
+        #endif
+      { OP_TERMINATION,     0,          NULL,                            NULL,         LC_NO    }
+    };
+/*----------------------------------------------------------------------------------------------*/
+
+
+
+
+
+
+/*----------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock:     NetworkMaster                       */
+/*                                              Function:   SaveConfiguration                   */
+/*----------------------------------------------------------------------------------------------*/
+/*    OP_TYPE    |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*               |          |                         |                         |               */
+/*----------------------------------------------------------------------------------------------*/
+/*                                                                                              */
+TOpL Op_NM_SaveConfig[] =
+
+    {
+        #ifdef NM_I4C
+      { OP_RESULT,          0x50,       NS_F_V NM_SaveConfig_Result,     NULL,         LC_EQ(0) }, /* NetworkMaster.SaveConfiguration.Result */
+        #endif
+        #ifdef NM_I4CA
+      { OP_RESULTACK,       0x50,       NS_F_V NM_SaveConfig_ResultAck,  NULL,         LC_EQ(2) }, /* NetworkMaster.SaveConfiguration.ResultAck */
+        #endif
+        #ifdef NM_I4F
+      { OP_ERROR,           0x50,       NS_F_V NM_SaveConfig_Error,      NULL,         LC_GE(1) }, /* NetworkMaster.SaveConfiguration.Error */
+        #endif
+        #ifdef NM_I4FA
+      { OP_ERRORACK,        0x50,       NS_F_V NM_SaveConfig_ErrorAck,   NULL,         LC_GE(3) }, /* NetworkMaster.SaveConfiguration.ErrorAck */
+        #endif
+      { OP_TERMINATION,     0,          NULL,                            NULL,         LC_NO    }
+    };
+/*----------------------------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock:     NetworkMaster                       */
+/*                                              Function:   SystemAvail                            */
+/*----------------------------------------------------------------------------------------------*/
+/*    OP_TYPE    |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*               |          |                         |                         |               */
+/*----------------------------------------------------------------------------------------------*/
+/*                                                                                              */
+TOpL Op_NM_SystemAvail[] =
+    {
+        #ifdef NM_I6C
+      { OP_STATUS,          0x50,       NS_F_V NM_SystemAvail_Status,    NULL,         LC_GE(2) }, /* NetworkMaster.SystemAvail.Status */
+        #endif
+        #ifdef NM_I6F
+      { OP_ERROR,           0x50,       NS_F_V NM_SystemAvail_Error,     NULL,         LC_GE(1) }, /* NetworkMaster.SystemAvail.Error */
+        #endif
+      { OP_TERMINATION,     0,          NULL,                            NULL,         LC_NO    }
+    };
+/*----------------------------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock:     NetworkMaster                       */
+/*                                              Function:   Version                             */
+/*----------------------------------------------------------------------------------------------*/
+/*    OP_TYPE    |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*               |          |                         |                         |               */
+/*----------------------------------------------------------------------------------------------*/
+/*                                                                                              */
+TOpL Op_NM_Version[] =
+    {
+        #ifdef NM_I8C
+      { OP_STATUS,          0x50,       NS_F_V NM_Version_Status,       NULL,         LC_GE(3) }, /* NetworkMaster.Version.Status */
+        #endif
+        #ifdef NM_I8F
+      { OP_ERROR,           0x50,       NS_F_V NM_Version_Error,        NULL,         LC_GE(1) }, /* NetworkMaster.Version.Error */
+        #endif
+      { OP_TERMINATION,     0,          NULL,                            NULL,         LC_NO    }
+    };
+/*----------------------------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock:     NetworkMaster                       */
+/*                                              Function:   FBlockInfo                          */
+/*----------------------------------------------------------------------------------------------*/
+/*    OP_TYPE    |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*               |          |                         |                         |               */
+/*----------------------------------------------------------------------------------------------*/
+/*                                                                                              */
+TOpL Op_NM_FBlockInfo[] =
+    {
+        #ifdef NM_I7C
+      { OP_STATUS,          0x50,       NS_F_V NM_FBlockInfo_Status,    NULL,         LC_GE(2) }, /* NetworkMaster.FBlockInfo.Status */
+        #endif
+        #ifdef NM_I7F
+      { OP_ERROR,           0x50,       NS_F_V NM_FBlockInfo_Error,     NULL,         LC_GE(1) }, /* NetworkMaster.FBlockInfo.Error */
+        #endif
+      { OP_TERMINATION,     0,          NULL,                            NULL,         LC_NO    }
+    };
+/*----------------------------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock:     NetworkMaster                       */
+/*                                              Function:   OwnConfigInvalid                    */
+/*----------------------------------------------------------------------------------------------*/
+/*    OP_TYPE    |   Flags  |   Ptr for write access  |   Ptr for read access   | Length check  */
+/*               |          |                         |                         |               */
+/*----------------------------------------------------------------------------------------------*/
+/*                                                                                              */
+TOpL Op_NM_OwnConfigInvalid[] =
+    {
+        #ifdef NM_I9CA
+      { OP_RESULTACK,       0x50,  NS_F_V NM_OwnConfigInvalid_ResultAck, NULL,         LC_GE(2) }, /* NetworkMaster.OwnConfigInvalid.ResultAck */
+        #endif
+        #ifdef NM_I9FA
+      { OP_ERRORACK,        0x50,  NS_F_V NM_OwnConfigInvalid_ErrorAck,  NULL,         LC_GE(1) }, /* NetworkMaster.OwnConfigInvalid.ErrorAck  */
+        #endif
+      { OP_TERMINATION,     0,     NULL,                                 NULL,         LC_NO    }
+    };
+/*----------------------------------------------------------------------------------------------*/
+
+
+
+
+
+/*--------------------------------------------------------------------------*/
+/*      Table of available FktIDs of        FBlock: NetworkMaster Shadow    */
+/*                                                                          */
+/*--------------------------------------------------------------------------*/
+/*      FktID                   |   Ptr on table with OP_Types              */
+/*                              |                                           */
+/*--------------------------------------------------------------------------*/
+/*                                                                          */
+_CONST struct Func_L_Type Func_NetworkMaster_S[] =
+
+    {
+      { FUNC_FKTIDS,                &Op_NM_FktIDs[0]            },          /* NetworkMaster.FktIDs             */
+      { FUNC_VERSION,               &Op_NM_Version[0]           },          /* NetworkMaster.Version            */
+      { FUNC_FBLOCKINFO,            &Op_NM_FBlockInfo[0]        },          /* NetworkMaster.FBlockInfo         */
+      { FUNC_CONFIGURATION,         &Op_NM_Configuration[0]     },          /* NetworkMaster.Configuration      */
+      { FUNC_CENTRALREGISTRY,       &Op_NM_CentralReg[0]        },          /* NetworkMaster.CentralRegistry    */
+      { FUNC_SAVECONFIG,            &Op_NM_SaveConfig[0]        },          /* NetworkMaster.SaveConfiguration  */
+      { FUNC_OWNCONFIGINVALID,      &Op_NM_OwnConfigInvalid[0]  },          /* NetworkMaster.OwnConfigInvalid    */
+      { FUNC_SYSTEMAVAIL,           &Op_NM_SystemAvail[0]       },          /* NetworkMaster.SystemAvail        */
+      { FUNC_TERMINATION,           0                           }
+    };
+/*--------------------------------------------------------------------------*/
+
+
+
+#endif /* _T_NM_S_TAB */
+
+
+

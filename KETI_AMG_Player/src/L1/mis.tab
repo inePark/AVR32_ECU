@@ -1,0 +1,51 @@
+/*
+==============================================================================
+
+Project:        MOST NetServices V3 for INIC
+Module:         Internal distribution table for MOST Control Messages used
+                by the Message Interface Service (MIS)
+File:           mis.tab
+Version:        3.0.x-SR-1  
+Language:       C
+Author(s):      S.Semmler, S.Kerber
+Date:           05.January.2011
+
+FileGroup:      Layer I
+Customer ID:    0018FF2A0300xx.N.KETI
+FeatureCode:    FCR1
+------------------------------------------------------------------------------
+
+                (c) Copyright 1998-2011
+                SMSC
+                All Rights Reserved
+
+------------------------------------------------------------------------------
+
+
+
+Modifications
+~~~~~~~~~~~~~
+Date            By      Description
+
+==============================================================================
+*/
+
+/*! \file
+  * \brief      Internal distribution table for MOST Control Messages used
+  *             by the Message Interface Service (MIS)
+  */
+
+#include "inic.tab"
+#include "nb.tab"
+
+#ifndef PACKET_COMMUNICATION_ONLY
+
+_CONST TMisFBlock mis_most_handler_table[] =
+{
+#if (defined VMSV_MIN) || (defined MCS_MIN) || (defined AMS_MIN) || ((defined MEP_MIN) && (defined _OS81110_MEP))
+    {   FBLOCK_NETBLOCK,    &mis_nb_handler_table[0]                },
+#endif
+    {   0,                  NULL                                    }
+};
+
+#endif

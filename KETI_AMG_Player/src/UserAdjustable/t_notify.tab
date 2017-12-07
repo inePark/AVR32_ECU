@@ -1,0 +1,78 @@
+/*
+==============================================================================
+
+Project:        MOST NetServices V3 for INIC
+Module:         FBlock Table of Notification Service
+                containing all FBlocks, which have to be serviced by
+                the Notification Service
+File:           T_Notify.tab
+Version:        3.0.2.Alpha.1
+Language:       C
+Author(s):      S.Kerber
+Date:           03.September.2009
+
+FileGroup:      Layer II
+Customer ID:    <None; as non-released alpha version>
+FeatureCode:    FCR1
+------------------------------------------------------------------------------
+
+                (c) Copyright 1998-2009
+                SMSC
+                All Rights Reserved
+
+------------------------------------------------------------------------------
+
+
+
+Modifications
+~~~~~~~~~~~~~
+Date        By      Description
+11/19/2009	GW		Setup for Eval92 NSV3 demo,
+                    Notification of FBlock Amp & AuxIn
+==============================================================================
+*/
+
+#ifndef _T_NOTIFY_TAB
+#define _T_NOTIFY_TAB
+
+
+
+
+/*-------------------------------------------------------------------------- */
+/* Hint: */
+/* We recommend to remove these macros into a header file, that is imported */
+/* by this file (T_NOTIFY.TAB) as well as by your module that implements the */
+/* respective FBlock.  */
+/*-------------------------------------------------------------------------- */
+
+#include "fblock_pv_amp.h"
+#include "fblock_pv_auxin.h"
+
+
+
+/*--------------------------------------------------------------------------*/
+/*                                 Table of all FBlocks,                    */
+/*                  which have to be serviced by the Notification Service   */
+/*                                                                          */
+/*--------------------------------------------------------------------------*/
+/*      FBlock      |   Maximum number of   |   Ptr at                      */
+/*      Index       |   devices to notify   |   property table              */
+/*--------------------------------------------------------------------------*/
+/*                                                                          */
+TNtfFBlockL NtfFBlockTab[NTF_MAX_FBLOCKS] =
+    {
+      { AMP_INDEX,         NUM_NTF_PROP_AMP,      &NtfPropTabAmp[0]       },   /* FBlock Amp     index = 0) */
+      { AUXIN_INDEX,       NUM_NTF_PROP_AUXIN,    &NtfPropTabAuxin[0]     }    /* FBlock Auxin   index = 1) */                
+
+    };
+/*--------------------------------------------------------------------------*/
+
+
+
+#endif /* _T_NOTIFY_TAB */
+
+
+
+
+
+

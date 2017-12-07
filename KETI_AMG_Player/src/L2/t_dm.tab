@@ -1,0 +1,84 @@
+/*
+==============================================================================
+
+Project:        MOST NetServices V3 for INIC
+Module:         Table of available Functions and Operations of FBlock: DebugMessages
+File:           T_DM.tab
+Version:        3.0.x-SR-1  
+Language:       C
+Author(s):      R.Hanke
+Date:           05.January.2011
+
+FileGroup:      Layer II
+Customer ID:    0018FF2A0300xx.N.KETI
+FeatureCode:    FCR1
+------------------------------------------------------------------------------
+
+                (c) Copyright 1998-2011
+                SMSC
+                All Rights Reserved
+
+------------------------------------------------------------------------------
+
+
+
+Modifications
+~~~~~~~~~~~~~
+Date    By      Description
+
+==============================================================================
+*/
+
+/*! \file
+  * \brief      Table of available Functions and Operations of 
+  *             FBlock: DebugMessages
+  */
+
+#ifndef _T_DM_TAB
+#define _T_DM_TAB
+
+
+
+
+/*-----------------------------------------------------------------------------------------------------------*/
+/*      Table of available Operations of        FBlock: DebugMessages                                        */
+/*                                              Function: Adjust_Application_DebugMessage                    */
+/*-----------------------------------------------------------------------------------------------------------*/
+/*    OP_TYPE         | Flags |   Ptr for write access        |   Ptr for read access        | Length check  */
+/*                    |       |                               |                              |               */
+/*-----------------------------------------------------------------------------------------------------------*/
+/*                                                                                                           */
+_CONST struct Op_L_Type Op_DebugMessages_AdjAppDbgMsg[] =
+
+  {
+    { OP_SET,          0xD0,  NS_F_V DM_AdjAppDbgMsg_Set,     NULL,                        LC_EQ(3) },  /* DebugMessages.Adjust_Application_DebugMessage.Set */
+    { OP_GET,          0x02,  NULL,                           NS_F_V DM_AdjAppDbgMsg_Get,  LC_EQ(2) },  /* DebugMessages.Adjust_Application_DebugMessage.Get */
+    { OP_SETGET,       0xD2,  NS_F_V DM_AdjAppDbgMsg_Set,     NS_F_V DM_AdjAppDbgMsg_Get,  LC_EQ(3) },  /* DebugMessages.Adjust_Application_DebugMessage.SetGet */
+    { OP_STATUS,       0x50,  NS_F_V DM_AdjAppDbgMsg_Status,  NULL,                        LC_GE(0) },  /* DebugMessages.Adjust_Application_DebugMessage.Status */
+    { OP_ERROR,        0x50,  NS_F_V DM_AdjAppDbgMsg_Error,   NULL,                        LC_GE(1) },  /* DebugMessages.Adjust_Application_DebugMessage.Error */
+    { OP_TERMINATION,  0,     NULL,                           NULL,                        LC_NO    }
+  };
+/*-------------------------------------------------------------------------------------------------*/
+
+
+/*------------------------------------------------------------------------------*/
+/*      Table of available FktIDs of            FBlock: DebugMessages           */
+/*                                                                              */
+/*------------------------------------------------------------------------------*/
+/*      FktID                   |   Ptr on table with OP_Types                  */
+/*                              |                                               */
+/*------------------------------------------------------------------------------*/
+/*                                                                              */
+_CONST struct Func_L_Type Func_DebugMessages[] =
+
+    {
+      { FUNC_ADJ_APP_DBG_MSG,  &Op_DebugMessages_AdjAppDbgMsg[0] },   /* DebugMessages.Adjust_Application_DebugMessage */
+      { FUNC_TERMINATION,      NULL                              }
+    };
+/*------------------------------------------------------------------------------*/
+
+
+
+
+
+#endif /* _T_DM_TAB */

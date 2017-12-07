@@ -1,0 +1,176 @@
+/*
+==============================================================================
+
+Project:        MOST NetServices V3 for INIC
+Module:         Internal distribution tables for MOST Control Messages
+                concerning FBlock NetBlock
+File:           nb.tab
+Version:        3.0.x-SR-1  
+Language:       C
+Author(s):      S.Semmler
+Date:           05.January.2011
+
+FileGroup:      Layer I
+Customer ID:    0018FF2A0300xx.N.KETI
+FeatureCode:    FCR1
+------------------------------------------------------------------------------
+
+                (c) Copyright 1998-2011
+                SMSC
+                All Rights Reserved
+
+------------------------------------------------------------------------------
+
+
+
+Modifications
+~~~~~~~~~~~~~
+Date            By      Description
+
+==============================================================================
+*/
+
+/*! \file
+  * \brief      Internal distribution tables for MOST Control Messages
+  *             concerning FBlock NetBlock
+  */
+
+
+#ifdef MCS_MIN
+/*
+------------------------------------------------------------------------------
+    NetBlock.NodeAddress.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr nb_node_address_status[] =
+{
+    WmcsHandleNodeAddrStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    NetBlock.NodeAddress
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation nb_node_address[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &nb_node_address_status     },
+    {   0,              NULL                                            }
+};
+
+/*
+------------------------------------------------------------------------------
+    NetBlock.GroupAddress.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr nb_group_address_status[] =
+{
+    WmcsHandleGroupAddrStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    NetBlock.GroupAddress
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation nb_group_address[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &nb_group_address_status  },
+    {   0,              NULL                                             }
+};
+#endif
+
+#ifdef AMS_MIN
+
+/*
+------------------------------------------------------------------------------
+    NetBlock.RetryParameters.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr nb_retry_params_status[] =
+{
+    MsgHandleRetryParamsStatus,
+    PmsHandleRetryParamsStatus,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    NetBlock.RetryParameters.Error
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr nb_retry_params_error[] =
+{
+    MsgHandleRetryError,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    NetBlock.RetryParameters
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation nb_retry_params[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &nb_retry_params_status   },
+    {   OP_ERROR,       (_CONST TMisHandlerFuncPtr *) &nb_retry_params_error    },
+    {   0,              NULL                                             }
+};
+
+#endif
+
+#if (defined MEP_MIN) && (defined _OS81110_MEP)
+
+/*
+------------------------------------------------------------------------------
+    NetBlock.EUI48.Status
+------------------------------------------------------------------------------
+*/
+_CONST TMisHandlerFuncPtr nb_eui48_status[] =
+{
+    WmcsHandleEUI48Status,
+    NULL
+};
+
+/*
+------------------------------------------------------------------------------
+    NetBlock.EUI48
+------------------------------------------------------------------------------
+*/
+_CONST TMisOperation nb_eui48[] =
+{
+    {   OP_STATUS,      (_CONST TMisHandlerFuncPtr *) &nb_eui48_status   },
+    {   0,              NULL                                             }
+};
+
+#endif
+
+
+/*
+------------------------------------------------------------------------------
+    NetBlock (NB)
+------------------------------------------------------------------------------
+*/
+#if (defined VMSV_MIN) || (defined MCS_MIN) || (defined AMS_MIN) || ((defined MEP_MIN) && (defined _OS81110_MEP))
+_CONST TMisFunction mis_nb_handler_table[] =
+{
+#ifdef MCS_MIN
+    {   FUNC_NODEADDRESS,           &nb_node_address[0]                 },
+    {   FUNC_GROUPADDRESS,          &nb_group_address[0]                },
+#endif
+
+#ifdef AMS_MIN
+    {   FUNC_RETRYPARAMETERS,       &nb_retry_params[0]                 },
+#endif
+
+#if (defined MEP_MIN) && (defined _OS81110_MEP)
+    {   FUNC_EUI48,                 &nb_eui48[0]                        },
+#endif
+    {   0,                          NULL                                }
+};
+#endif
+
+
+

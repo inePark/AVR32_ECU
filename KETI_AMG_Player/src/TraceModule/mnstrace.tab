@@ -1,0 +1,1347 @@
+/*
+==============================================================================
+
+Project:        MOST NetServices V3 for INIC
+Module:         Trace Modul
+File:           t_mnstrace.tab
+Version:        3.0.3
+Language:       C
+Author(s):      R. Wilhelm
+Date:           11.June.2010
+
+FileGroup:      Layer I
+Customer ID:    4130FF8A030003.N.GM
+FeatureCode:    FCR1
+------------------------------------------------------------------------------
+
+                (c) Copyright 1998-2010
+                SMSC
+                All Rights Reserved
+
+------------------------------------------------------------------------------
+
+
+
+Modifications
+~~~~~~~~~~~~~
+Date            By      Description
+
+==============================================================================
+*/
+
+
+
+
+#define DEFAULT_FILTER          0xFFFFFFFF
+
+/* This is an example, how to build custom filters ...
+ *
+ *
+ * #define DEF_FILTER_MBM          ((1 << (NST_E_ASSERT-1)) | (1 << (NST_E_INIT-1)))
+ * #define DEF_FILTER_AMS          (DEF_FILTER_MBM | (1 << (NST_E_TX-1)) | (1 << (NST_E_RX-1)) | (1 << (NST_E_STATE_CHANGE-1)))
+ * #define DEF_FILTER_MNS          (DEF_FILTER_AMS | (1 << (NST_E_FUNC_ENTRY_API-1)))
+ * #define DEF_FILTER_PMS          DEF_FILTER_AMS
+ * #define DEF_FILTER_MIS          DEF_FILTER_AMS
+ * #define DEF_FILTER_VMSV         DEF_FILTER_AMS
+ * #define DEF_FILTER_WMCS         DEF_FILTER_AMS
+ * #define DEF_FILTER_WADS         DEF_FILTER_AMS
+ * #define DEF_FILTER_WSCM         DEF_FILTER_AMS
+ */
+
+#define DEF_FILTER_MBM          DEFAULT_FILTER
+#define DEF_FILTER_AMS          DEFAULT_FILTER
+#define DEF_FILTER_MNS          DEFAULT_FILTER
+#define DEF_FILTER_PMS          DEFAULT_FILTER
+#define DEF_FILTER_MIS          DEFAULT_FILTER
+#define DEF_FILTER_VMSV         DEFAULT_FILTER
+#define DEF_FILTER_WMCS         DEFAULT_FILTER
+#define DEF_FILTER_WADS         DEFAULT_FILTER
+#define DEF_FILTER_WSCM         DEFAULT_FILTER
+#define DEF_FILTER_AAM          DEFAULT_FILTER
+#define DEF_FILTER_MDM          DEFAULT_FILTER
+
+/*--------------------------------------------------------------------------*/
+/* filter variables                                                         */
+/*--------------------------------------------------------------------------*/
+TFilter MBM_Filter;
+TFilter AMS_Filter;
+TFilter PMS_Filter;
+TFilter MNS_Filter;
+TFilter MIS_Filter;
+TFilter WMCS_Filter;
+TFilter WADS_Filter;
+TFilter VMSV_Filter;
+TFilter WSCM_Filter;
+TFilter AAM_Filter;
+TFilter MDM_Filter;
+
+
+
+
+/*--------------------------------------------------------------------------*/
+/* list of available tables                                                 */
+/*--------------------------------------------------------------------------*/
+extern TFktList   FktList_INIC[];
+extern TFktList   FktList_NetBlock[];
+extern TFktList   FktList_ET[];
+
+extern TNumString MBM_FuncList[];
+extern TNumString AMS_FuncList[];
+extern TNumString MNS_FuncList[];
+extern TNumString PMS_FuncList[];
+extern TNumString MIS_FuncList[];
+extern TNumString VMSV_FuncList[];
+extern TNumString WMCS_FuncList[];
+extern TNumString WADS_FuncList[];
+extern TNumString WSCM_FuncList[];
+extern TNumString MNS_ServiceList[];
+extern TNumString MNS_ConfigList[];
+extern TNumString MNS_L2_FlagList[];
+extern TNumString MNS_MHP_FlagList[];
+extern TNumString MNS_PMHS_FlagList[];
+extern TNumString MNS_ChipList[];
+extern TNumString AAM_FuncList[];
+extern TNumString MDM_FuncList[];
+extern TNumString MNS_TM_OP[];
+extern TNumString MNS_TM_EV[];
+extern TNumString MNS_TC_List[];
+
+
+
+/*--------------------------------------------------------------------------*/
+/* list of services                                                         */
+/*--------------------------------------------------------------------------*/
+/*    ServiceID    | Ptr to Function table | Ptr to filter / default filter |  Name         */
+/*--------------------------------------------------------------------------*/
+TServices T_Services[] =
+{
+    {MNS_P_SRV_MBM,     MBM_FuncList,       &MBM_Filter,    DEF_FILTER_MBM,     "MBM:  "   },
+    {MNS_P_SRV_AMS,     AMS_FuncList,       &AMS_Filter,    DEF_FILTER_AMS,     "AMS:  "   },
+    {MNS_P_SRV_MNS,     MNS_FuncList,       &MNS_Filter,    DEF_FILTER_MNS,     "MNS:  "   },
+    {MNS_P_SRV_PMS,     PMS_FuncList,       &PMS_Filter,    DEF_FILTER_PMS,     "PMS:  "   },
+    {MNS_P_SRV_MIS,     MIS_FuncList,       &MIS_Filter,    DEF_FILTER_MIS,     "MIS:  "   },
+    {MNS_P_SRV_VMSV,    VMSV_FuncList,      &VMSV_Filter,   DEF_FILTER_VMSV,    "VMSV: "   },
+    {MNS_P_SRV_WMCS,    WMCS_FuncList,      &WMCS_Filter,   DEF_FILTER_WMCS,    "WMCS: "   },
+    {MNS_P_SRV_WADS,    WADS_FuncList,      &WADS_Filter,   DEF_FILTER_WADS,    "WADS: "   },
+    {MNS_P_SRV_WSCM,    WSCM_FuncList,      &WSCM_Filter,   DEF_FILTER_WSCM,    "WSCM: "   },
+    {MNS_P_SRV_AAM,     AAM_FuncList,       &AAM_Filter,    DEF_FILTER_AAM,     "AAM:  "   },
+    {MNS_P_SRV_MDM,     MDM_FuncList,       &MDM_Filter,    DEF_FILTER_MDM,     "MDM:  "   },
+    {SRV_TERMINATION,   NULL,               NULL,           0,                  NULL       }
+};
+
+
+
+/*-----------------------------------------------------------------------------*/
+/* list of MBM function names                                                  */
+/*-----------------------------------------------------------------------------*/
+/*  Function ID  | Name                                                        */
+/*-----------------------------------------------------------------------------*/
+TNumString MBM_FuncList[] =
+{
+    {((word)0)  ,  "MbmInit"                             },  /* MBM_0   */
+    {((word)1)  ,  "MbmAllocate"                         },  /* MBM_1   */
+    {((word)2)  ,  "MbmFree2"                            },  /* MBM_2   */
+    {((word)3)  ,  "MbmQueueInit"                        },  /* MBM_3   */
+    {((word)4)  ,  "MbmEnqueue"                          },  /* MBM_4   */
+    {((word)5)  ,  "_MbmEnqueue"                         },  /* MBM_5   */
+    {((word)6)  ,  "MbmEnqueueFirst"                     },  /* MBM_6   */
+    {((word)7)  ,  "_MbmEnqueueFirst"                    },  /* MBM_7   */
+    {((word)8)  ,  "MbmDequeue"                          },  /* MBM_8   */
+    {((word)9)  ,  "_MbmDequeue"                         },  /* MBM_9   */
+
+
+    {((word)12) ,  "_MbmPeek"                            },  /* MBM_12  */
+    {((word)13) ,  "_MbmUnlink"                          },  /* MBM_13  */
+    {((word)14) ,  "MbmReserve"                          },  /* MBM_14  */
+    {((word)15) ,  "MbmPush"                             },  /* MBM_15  */
+    {((word)16) ,  "MbmChangeType"                       },  /* MBM_16  */
+    {((word)17) ,  "MbmPullHeaders"                      },  /* MBM_17  */
+
+    {((word)19) ,  "MbmGetExtPayloadLen"                 },  /* MBM_19  */
+    {((word)20) ,  "_MbmInitPool"                        },  /* MBM_20  */
+    {((word)21) ,  "_MbmQueueInit"                       },  /* MBM_21  */
+
+    {((word)24) ,  "MbmGetBufData"                       },  /* MBM_24  */
+    {((word)25) ,  "MbmGetBufLength"                     },  /* MBM_25  */
+    {((word)26) ,  "_MbmMemAlloc"                        },  /* MBM_26  */
+    {((word)27) ,  "MbmMemFree"                          },  /* MBM_27  */
+    {((word)28) ,  "_MbmMemInit"                         },  /* MBM_28  */
+    {((word)29) ,  "MbmGetBuf"                           },  /* MBM_29  */
+    {((word)30) ,  "MbmIsFromPool"                       },  /* MBM_30  */
+    {((word)31) ,  "MbmEnqueueBehind"                    },  /* MBM_31  */
+    {((word)33) ,  "_MbmEnqueueBehind"                   },  /* MBM_33  */
+    {((word)35) ,  "MbmGetUsedTxBuffers"                 },  /* MBM_35  */
+    {((word)36) ,  "MbmGetUsedRxBuffers"                 },  /* MBM_36  */
+    {((word)37) ,  "MbmGetUsage"                         },  /* MBM_37  */
+    {((word)38) ,  "MbmGetUsageTop"                      },  /* MBM_38  */
+    {((word)39) ,  "MbmGetFragmentation"                 },  /* MBM_39  */
+    {((word)40) ,  "_MbmUpdateUsageValue"                },  /* MBM_40  */
+    {((word)41) ,  "MbmSetUsageThreshold"                },  /* MBM_41  */
+    {((word)42) ,  "MbmAllocateRxMinPayload"             },  /* MBM_42  */
+    {((word)43) ,  "_MbmSendMdmMbmBufferAllocationFailed"},  /* MBM_43  */
+    {STR_TERMINATION,   NULL                             }   /* end of table   */
+};
+
+
+/*-----------------------------------------------------------------------------*/
+/* list of AMS function names                                                  */
+/*-----------------------------------------------------------------------------*/
+/*  Function ID  | Name                                                        */
+/*-----------------------------------------------------------------------------*/
+TNumString AMS_FuncList[] =
+{
+    {((word)0 ),  "MsgInit"                             },    /* AMS_0          */
+    {((word)1 ),  "MsgService"                          },    /* AMS_1          */
+    {((word)2 ),  "MsgSetPendingEvent"                  },    /* AMS_2          */
+    {((word)3 ),  "MsgGetNextEventToHandle"             },    /* AMS_3          */
+    {((word)4 ),  "MsgGetTxPtrExt"                      },    /* AMS_4          */
+    {((word)5 ),  "MsgSend"                             },    /* AMS_5          */
+    {((word)6 ),  "MsgSend2"                            },    /* AMS_6          */
+    {((word)7 ),  "MsgSend3"                            },    /* AMS_7          */
+    {((word)8 ),  "MsgTxFinal"                          },    /* AMS_8          */
+    {((word)9 ),  "MsgTxUnused"                         },    /* AMS_9          */
+    {((word)10),  "MsgRxTrigger"                        },    /* AMS_10         */
+    {((word)11),  "MsgRxOutTrigger"                     },    /* AMS_11         */
+    {((word)12),  "MsgRxError"                          },    /* AMS_12         */
+    {((word)13),  "MsgFreeRxMsg"                        },    /* AMS_13         */
+    {((word)14),  "MsgGetRxInPtrExt"                    },    /* AMS_14         */
+    {((word)15),  "MsgRxInReady"                        },    /* AMS_15         */
+    {((word)16),  "MsgTxDataByte"                       },    /* AMS_16         */
+    {((word)17),  "MsgTxDataWord"                       },    /* AMS_17         */
+    {((word)18),  "MsgTxDataLong"                       },    /* AMS_18         */
+    {((word)19),  "MsgTxBcdToAscII"                     },    /* AMS_19         */
+    {((word)20),  "MsgRxDataByte"                       },    /* AMS_20         */
+    {((word)21),  "MsgRxDataWord"                       },    /* AMS_21         */
+    {((word)22),  "MsgRxDataLong"                       },    /* AMS_22         */
+    {((word)24),  "AddrHSearchStart"                    },    /* AMS_24         */
+    {((word)26),  "MsgEHCIGoProtected"                  },    /* AMS_26         */
+    {((word)27),  "MsgEHCIGoSemiProtected"              },    /* AMS_27         */
+    {((word)28),  "MsgRetry"                            },    /* AMS_28         */
+    {((word)29),  "MsgHandleAbilityToSegmentStatus"     },    /* AMS_29         */
+    {((word)30),  "MsgHandleAbilityToSegmentError"      },    /* AMS_30         */
+    {((word)31),  "MsgGetSegMode"                       },    /* AMS_31         */
+    {((word)33),  "MsgForceSegMode"                     },    /* AMS_33         */
+    {((word)34),  "MsgRequestSegMode"                   },    /* AMS_34         */
+    {((word)35),  "MsgForceMidLevelRetries"             },    /* AMS_35         */
+    {((word)37),  "MsgHandleMidLevelRetriesStatus"      },    /* AMS_37         */
+    {((word)38),  "MsgNIStateNetOn"                     },    /* AMS_38         */
+    {((word)39),  "MsgPrepareReInit"                    },    /* AMS_39         */
+    {((word)40),  "MsgGetUsedTxBuffers"                 },    /* AMS_40         */
+    {((word)41),  "MsgGetUsedRxBuffers"                 },    /* AMS_41         */
+    {((word)42),  "MsgDiscardRx"                        },    /* AMS_42         */
+    {((word)43),  "MsgTxBcdToStr"                       },    /* AMS_43         */
+    {((word)44),  "MsgVersionToISO8859"                 },    /* AMS_44         */
+    {((word)45),  "MsgRequestRetryParams"               },    /* AMS_45         */
+    {((word)46),  "MsgSendRetryParams"                  },    /* AMS_46         */
+    {((word)47),  "MsgHandleRetryOptionsStatus"         },    /* AMS_47         */
+    {((word)48),  "MsgHandleRetryParamsStatus"          },    /* AMS_48         */
+    {((word)49),  "MsgHandleRetryError"                 },    /* AMS_49         */
+    {((word)50),  "MsgGetRetryConfig"                   },    /* AMS_50         */
+    {((word)51),  "MsgSetRetryConfig"                   },    /* AMS_51         */
+    {((word)52),  "MsgReleasePayload"                   },    /* AMS_52         */
+    {((word)53),  "MsgNIStateNetInit"                   },    /* AMS_53         */
+    {STR_TERMINATION,   NULL                        }     /* end of table   */
+};
+
+
+/*-----------------------------------------------------------------------------*/
+/* list of MNS function names                                                  */
+/*-----------------------------------------------------------------------------*/
+/*  Function ID  | Name                                                        */
+/*-----------------------------------------------------------------------------*/
+TNumString MNS_FuncList[] =
+{
+    {((word)  0),  "InitNetServices"                     },  /* MNS_0  */
+    {((word)  1),  "MostService"                         },  /* MNS_1  */
+    {((word)  2),  "MnsSetPendingService"                },  /* MNS_2  */
+    {((word)  3),  "MnsSetPendingEventFlag"              },  /* MNS_3  */
+    {((word)  4),  "MnsGetNextEventFlagToCall"           },  /* MNS_4  */
+    {((word)  5),  "MnsGetNextServiceToCall"             },  /* MNS_5  */
+    {((word)  6),  "MnsService"                          },  /* MNS_6  */
+    {((word)  7),  "MnsSetPendingEvent"                  },  /* MNS_7  */
+    {((word)  8),  "MnsGetNextEventToHandle"             },  /* MNS_8  */
+    {((word)  9),  "MnsDistribEvent"                     },  /* MNS_9  */
+    {((word) 10),  "MnsInit"                             },  /* MNS_10 */
+    {((word) 11),  "MnsServiceInitComplete"              },  /* MNS_11 */
+    {((word) 12),  "MnsIsNSInitComplete"                 },  /* MNS_12 */
+    {((word) 15),  "MostClearTimer"                      },  /* MNS_15 */
+    {((word) 16),  "MostSetTimer"                        },  /* MNS_16 */
+    {((word) 17),  "MostGetTimer"                        },  /* MNS_17 */
+    {((word) 20),  "MnsReportError"                      },  /* MNS_20 */
+    {((word) 21),  "MnsReportInitComplete"               },  /* MNS_21 */
+    {((word) 22),  "MnsEHCIGoProtected"                  },  /* MNS_22 */
+    {((word) 23),  "MnsEHCIGoSemiProtected"              },  /* MNS_23 */
+    {((word) 24),  "MnsEHCIGoAttached"                   },  /* MNS_24 */
+    {((word) 26),  "MnsHandleVersionInfo"                },  /* MNS_26 */
+    {((word) 27),  "MnsHandleEHCIStateStatus"            },  /* MNS_27 */
+    {((word) 29),  "MnsRequestLayer2"                    },  /* MNS_29 */
+    {((word) 30),  "MnsRequestLayer2Timer"               },  /* MNS_30 */
+    {((word) 31),  "MnsRequestHigh"                      },  /* MNS_31 */
+    {((word) 32),  "MnsRequestHighTimerTx"               },  /* MNS_32 */
+    {((word) 33),  "MnsRequestHighTimerRx"               },  /* MNS_33 */
+    {((word) 34),  "MnsRequestPacket"                    },  /* MNS_34 */
+    {((word) 35),  "MnsRequestPacketTimerTx"             },  /* MNS_35 */
+    {((word) 36),  "MnsRequestPacketTimerRx"             },  /* MNS_36 */
+    {((word) 43),  "MnsGetEHCIState"                     },  /* MNS_43 */
+    {((word) 45),  "MostRegisterTimer"                   },  /* MNS_45 */
+    {((word) 46),  "MostUnregisterTimer"                 },  /* MNS_46 */
+    {((word) 49),  "MnsFireWatchdogTrigger"              },  /* MNS_49 */
+    {((word) 51),  "MnsRetry"                            },  /* MNS_51 */
+    {((word) 52),  "MnsCheckWatchdogMode"                },  /* MNS_52 */
+    {((word) 53),  "MnsHandleWatchdogModeStatus"         },  /* MNS_53 */
+    {((word) 54),  "MostIsSupported"                     },  /* MNS_54 */
+    {((word) 55),  "MnsNtfCheck"                         },  /* MNS_55 */
+    {((word) 56),  "MnsMemCpy"                           },  /* MNS_56 */
+    {((word) 57),  "MostGetVersionInfo"                  },  /* MNS_57 */
+    {((word) 58),  "MostGetRevision"                     },  /* MNS_58 */
+    {((word) 59),  "MnsMemSet"                           },  /* MNS_59 */
+    {((word) 60),  "MnsRequestEHCIState"                 },  /* MNS_60 */
+    {((word) 61),  "MnsForceProtected"                   },  /* MNS_61 */
+    {((word) 62),  "MostCheckTimers"                     },  /* MNS_62 */
+    {((word) 63),  "GetNetServicesConfig"                },  /* MNS_63 */
+    {((word) 64),  "StopNetServices"                     },  /* MNS_64 */
+    {((word) 65),  "MostAllowRemoteAccess"               },  /* MNS_65 */
+    {((word) 66),  "MnsEnforceRemoteAccess"              },  /* MNS_66 */
+    {((word) 68),  "MnsHandleError"                      },  /* MNS_68 */
+    {((word) 69),  "MnsPMReady"                          },  /* MNS_69 */
+    {((word) 70),  "MnsResetComplete"                    },  /* MNS_70 */
+    {((word) 71),  "MhpTxDelayTimeout"                   },  /* MNS_71 */
+    {((word) 73),  "MnsCheckHigherLayers"                },  /* MNS_73 */
+    {((word) 74),  "MnsStartLayer2"                      },  /* MNS_74 */
+    {((word) 75),  "MnsStopLayer2"                       },  /* MNS_75 */
+    {((word) 76),  "MnsStartPacketLayers"                },  /* MNS_76 */
+    {((word) 77),  "MnsStopPacketLayers"                 },  /* MNS_77 */
+    {((word) 96),  "MnsTMHandleEvent"                    },  /* MNS_96 */
+    {((word) 97),  "MnsTMUpdate"                         },  /* MNS_97 */
+    {((word) 98),  "MnsTMDiff"                           },  /* MNS_98 */
+    {((word) 99),  "MnsTMMinTimeout"                     },  /* MNS_99 */
+    {((word)100),  "MnsTMSchedule"                       },  /* MNS_100 */
+    {((word)102),  "MnsSignalNetOn"                      },  /* MNS_102 */
+    {((word)104),  "MnsWDTxComplete"                     },  /* MNS_104 */
+    {((word)105),  "MnsDisableSCError"                   },  /* MNS_105 */
+    {((word)106),  "MnsTimerRegistered"                  },  /* MNS_106 */
+    {((word)107),  "MnsReRegisterTimer"                  },  /* MNS_107 */
+    {((word)108),  "MnsGetWatchdogKickTimeout"           },  /* MNS_108 */
+    {((word)109),  "MostNtfIsRequired"                   },  /* MNS_109 */
+    {((word)113),  "MnsSendMdmMnsInitTimeout"            },  /* MNS_113 */
+    {((word)114),  "MnsSendMdmMnsVersionConflict"        },  /* MNS_114 */
+    {((word)115),  "MnsCheckNbminNotification"           },  /* MNS_115 */
+    {((word)116),  "MnsPrepareReInit"                    },  /* MNS_116 */
+    {((word)117),  "MnsCheckTermination"                 },  /* MNS_117 */
+    {STR_TERMINATION,   NULL                        }   /* end of table   */
+};
+
+
+/*-----------------------------------------------------------------------------*/
+/* list of PMS function names                                                  */
+/*-----------------------------------------------------------------------------*/
+/*  Function ID  | Name                                                        */
+/*-----------------------------------------------------------------------------*/
+TNumString PMS_FuncList[] =
+{
+    {((word) 0),  "PmsRx"                               },    /* PMS_0          */
+    {((word) 1),  "PmsTxRelease"                        },    /* PMS_1          */
+    {((word) 2),  "PmsSetFifoInterface"                 },    /* PMS_2          */
+    {((word) 3),  "PmsGetFifoInterface"                 },    /* PMS_3          */
+    {((word) 4),  "PmsInit"                             },    /* PMS_4          */
+    {((word) 5),  "PmsService"                          },    /* PMS_5          */
+    {((word) 6),  "PmsGetBuf"                           },    /* PMS_6          */
+    {((word) 7),  "PmsSend"                             },    /* PMS_7          */
+    {((word) 8),  "MbmFree"                             },    /* PMS_8          */
+    {((word) 9),  "PmsFifoInit"                         },    /* PMS_9          */
+    {((word)10),  "PmsSetPendingEvent"                  },    /* PMS_10         */
+    {((word)11),  "PmsFillDefaultHeader"                },    /* PMS_11         */
+    {((word)12),  "PmsCompressHeader"                   },    /* PMS_12         */
+    {((word)13),  "PmsDecompressHeader"                 },    /* PMS_13         */
+    {((word)15),  "PmsGetTxFifo"                        },    /* PMS_15         */
+    {((word)16),  "PmsTxNextSegment"                    },    /* PMS_16         */
+    {((word)17),  "PmsFifoTxTrigger"                    },    /* PMS_17         */
+    {((word)18),  "PmsProcessRxMsgQueue"                },    /* PMS_18         */
+    {((word)19),  "PmsFifoProcessStatus"                },    /* PMS_19         */
+    {((word)20),  "PmsSendCommand"                      },    /* PMS_20         */
+    {((word)21),  "PmsSyncIn"                           },    /* PMS_21         */
+    {((word)22),  "PmsSync"                             },    /* PMS_22         */
+    {((word)23),  "PmsSyncHandler"                      },    /* PMS_23         */
+    {((word)24),  "PmsRxSegProcess"                     },    /* PMS_24         */
+    {((word)25),  "PmsRxSegFindMatch"                   },    /* PMS_25         */
+    {((word)26),  "PmsGetRxBufMcm"                      },    /* PMS_26         */
+    {((word)27),  "PmsGetRxBufMdp"                      },    /* PMS_27         */
+    {((word)28),  "PmsRxSegGarbageCollector"            },    /* PMS_28         */
+    {((word)29),  "PmsRxSegError"                       },    /* PMS_29         */
+    {((word)30),  "PmsProcessRxStatusQueue"             },    /* PMS_30         */
+    {((word)31),  "PmsGetRxBuf"                         },    /* PMS_31         */
+    {((word)32),  "PmsRxHandleAck"                      },    /* PMS_32         */
+    {((word)33),  "PmsRxSegMatch"                       },    /* PMS_33         */
+    {((word)34),  "PmsRxSegAppend"                      },    /* PMS_34         */
+    {((word)35),  "PmsSegErrorTxStatus"                 },    /* PMS_35         */
+    {((word)36),  "PmsSetReferencesToNull"              },    /* PMS_36         */
+    {((word)37),  "PmsRespondCommand"                   },    /* PMS_37         */
+    {((word)38),  "PmsFreeShadow"                       },    /* PMS_38         */
+    {((word)39),  "PmsProcessCompressedRxMsg"           },    /* PMS_39         */
+    {((word)40),  "PmsProcessRxMsgOut"                  },    /* PMS_40         */
+    {((word)41),  "PmsSetExternalBufferAvailable"       },    /* PMS_41         */
+    {((word)42),  "PmsReleasePayload"                   },    /* PMS_42         */
+    {((word)43),  "PmsInjectWaitingRx"                  },    /* PMS_43         */
+    {((word)44),  "PmsFlushMsgTxBuffer"                 },    /* PMS_44         */
+    {((word)45),  "PmsTxStarted"                        },    /* PMS_45         */
+    {((word)46),  "PmsPrepareReInit"                    },    /* PMS_46         */
+    {((word)47),  "PmsFlushTxQueue"                     },    /* PMS_47         */
+    {((word)48),  "PmsPrepareMepHeaderExt"              },    /* PMS_48         */
+    {((word)49),  "PmsTxReady"                          },    /* PMS_49         */
+    {((word)50),  "PmsDiscardRx"                        },    /* PMS_50         */
+    {((word)51),  "PmsFreeUserTxPayload"                },    /* PMS_51         */
+    {((word)52),  "PmsDiscardPendingRx"                 },    /* PMS_52         */
+    {((word)53),  "PmsGetRxFifo"                        },    /* PMS_53         */
+    {((word)54),  "PmsSendBypass"                       },    /* PMS_54         */
+    {((word)55),  "PmsExtendSyncTimeout"                },    /* PMS_55         */
+    {((word)56),  "PmsHandleRetryParamsStatus"          },    /* PMS_56         */
+    {((word)57),  "PmsHandleMidLevelRetriesStatus"      },    /* PMS_57         */
+    {((word)58),  "PmsInsertRetryValues"                },    /* PMS_58         */
+    {((word)59),  "PmsEnableFeature"                    },    /* PMS_59         */
+    {((word)60),  "PmsFeatureEnabled"                   },    /* PMS_60         */
+    {((word)61),  "PmsTxSyncSegmented"                  },    /* PMS_61         */
+    {((word)62),  "PmsInitExternalBuf"                  },    /* PMS_62         */
+    {STR_TERMINATION,   NULL                        }     /* end of table   */
+};
+
+
+/*-----------------------------------------------------------------------------*/
+/* list of MIS function names                                                  */
+/*-----------------------------------------------------------------------------*/
+/*  Function ID  | Name                                                        */
+/*-----------------------------------------------------------------------------*/
+TNumString MIS_FuncList[] =
+{
+    {((word) 0),  "MisInit"                             },    /* MIS_0          */
+    {((word) 1),  "MisService"                          },    /* MIS_1          */
+    {((word) 2),  "MisGetNextEventToHandle"             },    /* MIS_2          */
+    {((word) 3),  "MisSetPendingEvent"                  },    /* MIS_3          */
+    {((word) 4),  "MisHandleBufFreed"                   },    /* MIS_4          */
+    {((word) 5),  "MisHandlePmsEvent"                   },    /* MIS_5          */
+    {((word) 6),  "MisHandleInicMsg"                    },    /* MIS_6          */
+    {((word) 7),  "MisHandleMostMsg"                    },    /* MIS_7          */
+    {((word) 8),  "MisHandlePacketData"                 },    /* MIS_8          */
+    {((word) 9),  "MisResetInic"                        },    /* MIS_9          */
+    {((word)10),  "MisGetResetCount"                    },    /* MIS_10         */
+    {((word)11),  "MisSetResetCount"                    },    /* MIS_11         */
+    {((word)12),  "MisFilterMostMsg"                    },    /* MIS_12         */
+    {STR_TERMINATION,   NULL                        }     /* end of table   */
+};
+
+/*-----------------------------------------------------------------------------*/
+/* list of VMSV function names                                                 */
+/*-----------------------------------------------------------------------------*/
+/*  Function ID  | Name                                                        */
+/*-----------------------------------------------------------------------------*/
+TNumString VMSV_FuncList[] =
+{
+    {((word) 0),  "VmsvInit"                            },    /* VMSV_0         */
+    {((word) 1),  "VmsvService"                         },    /* VMSV_1         */
+    {((word) 2),  "VmsvSetPendingEvent"                 },    /* VMSV_2         */
+    {((word) 3),  "VmsvGetNextEventToHandle"            },    /* VMSV_3         */
+    {((word) 4),  "MostStartUp"                         },    /* VMSV_4         */
+    {((word) 5),  "VmsvNWStartUpRetry"                  },    /* VMSV_5         */
+    {((word) 6),  "MostShutDown"                        },    /* VMSV_6         */
+    {((word) 7),  "MostGetState"                        },    /* VMSV_7         */
+    {((word) 8),  "MostGetDevMode"                      },    /* VMSV_8         */
+    {((word) 9),  "MostGetNCState"                      },    /* VMSV_9         */
+    {((word)11),  "VmsvEHCIGoProtected"                 },    /* VMSV_11        */
+    {((word)12),  "VmsvEHCIGoAttached"                  },    /* VMSV_12        */
+    {((word)13),  "VmsvHandleDeviceModeStatus"          },    /* VMSV_13        */
+    {((word)14),  "VmsvHandleLockStateStatus"           },    /* VMSV_14        */
+    {((word)16),  "VmsvHandleNIEventStatus"             },    /* VMSV_16        */
+    {((word)17),  "VmsvHandleNIStateStatus"             },    /* VMSV_17        */
+    {((word)18),  "VmsvHandleNCEDelayedStatus"          },    /* VMSV_18        */
+    {((word)20),  "VmsvHandleNCStateStatus"             },    /* VMSV_20        */
+    {((word)22),  "MostSetDevMode"                      },    /* VMSV_22        */
+    {((word)23),  "VmsvHandleRBDResultStatus"           },    /* VMSV_23        */
+    {((word)25),  "VmsvFireCallbacks"                   },    /* VMSV_25        */
+    {((word)26),  "VmsvHandleNIStateChange"             },    /* VMSV_26        */
+    {((word)27),  "VmsvHandleNIEventChange"             },    /* VMSV_27        */
+    {((word)28),  "VmsvHandleNCEDelayedChange"          },    /* VMSV_28        */
+    {((word)29),  "VmsvHandleLockStateChange"           },    /* VMSV_29        */
+    {((word)30),  "VmsvHandleRBDResultChange"           },    /* VMSV_30        */
+    {((word)31),  "MostGetMaxPos"                       },    /* VMSV_31        */
+    {((word)32),  "VmsvRegisterInternalHooks"           },    /* VMSV_32        */
+    {((word)33),  "VmsvGetNCStateShutdown"              },    /* VMSV_33        */
+    {((word)34),  "VmsvHandleConfigStatus"              },    /* VMSV_34        */
+    {((word)35),  "VmsvHandleNCStateChange"             },    /* VMSV_35        */
+    {((word)36),  "VmsvHandleFBlockIDsGet"              },    /* VMSV_36        */
+    {((word)37),  "VmsvInjectFBlockIDsGet"              },    /* VMSV_37        */
+    {((word)38),  "VmsvRetry"                           },    /* VMSV_38        */
+    {((word)39),  "VmsvTxFilter"                        },    /* VMSV_39        */
+    {((word)40),  "VmsvRxFilter"                        },    /* VMSV_40        */
+    {((word)41),  "VmsvHandleNWStartupError"            },    /* VMSV_41        */
+    {((word)42),  "VmsvHandleNWShutdownError"           },    /* VMSV_42        */
+    {((word)45),  "VmsvCheckForNpr"                     },    /* VMSV_45        */
+    {((word)46),  "VmsvReportNetOn"                     },    /* VMSV_46        */
+    {((word)47),  "VmsvHandlePMIStateStatus"            },    /* VMSV_47        */
+    {((word)48),  "VmsvHandlePMIStateChange"            },    /* VMSV_48        */
+    {((word)49),  "MostGetPMIState"                     },    /* VMSV_49        */
+    {((word)54),  "MostGetSysErrMonitor"                },    /* VMSV_54        */
+    {((word)55),  "VmsvRequestSysErrMonitor"            },    /* VMSV_55        */
+    {((word)56),  "VmsvHandleSysErrMonitorStatus"       },    /* VMSV_56        */
+    {((word)57),  "VmsvReportSysErrMonitor"             },    /* VMSV_57        */
+    {((word)58),  "VmsvRefreshNodePos"                  },    /* VMSV_58        */
+    {((word)59),  "VmsvInjectCfgState"                  },    /* VMSV_59        */
+    {((word)60),  "VmsvEHCIGoSemiProtected"             },    /* VMSV_60        */
+    {((word)66),  "VmsvCommRBDResult"                   },    /* VMSV_66        */
+    {((word)67),  "VmsvCommRBDResultPos0"               },    /* VMSV_67        */
+    {((word)68),  "VmsvCommRBDResultPosX"               },    /* VMSV_68        */
+    {((word)69),  "VmsvBroadcastRBDResult"              },    /* VMSV_69        */
+    {((word)70),  "VmsvHandleDiagResult"                },    /* VMSV_70        */
+    {((word)71),  "MostGetNetOnTime"                    },    /* VMSV_71        */
+    {((word)72),  "VmsvRequestNetOnTime"                },    /* VMSV_72        */
+    {((word)73),  "VmsvHandleNetOnTimerStatus"          },    /* VMSV_73        */
+    {((word)74),  "VmsvHandleNetOnTimerError"           },    /* VMSV_74        */
+    {((word)81),  "MostGetLockState"                    },    /* VMSV_81        */
+    {((word)85),  "VmsvHandleSSOResultStatus"           },    /* VMSV_85        */
+    {((word)86),  "VmsvHandleSSOResultError"            },    /* VMSV_86        */
+    {((word)87),  "VmsvResetSSOResult"                  },    /* VMSV_87        */
+    {((word)88),  "VmsvGetSSOResult"                    },    /* VMSV_88        */
+    {((word)90),  "VmsvHandleNIWakeupModeStatus"        },    /* VMSV_90        */
+    {((word)91),  "VmsvHandleNIWakeupModeError"         },    /* VMSV_91        */
+    {((word)92),  "VmsvRequestNIWakeUpMode"             },    /* VMSV_92        */
+    {((word)93),  "VmsvSetNIWakeUpMode"                 },    /* VMSV_93        */
+    {((word)94),  "VmsvPhysicalLayerTestStart"          },    /* VMSV_94        */
+    {((word)95),  "VmsvPhysicalLayerTestProcedure"      },    /* VMSV_95        */
+    {((word)96),  "VmsvPhysicalLayerTestResult"         },    /* VMSV_96        */
+    {((word)97),  "VmsvHandleCodingErrorsStatus"        },    /* VMSV_97        */
+    {((word)98),  "VmsvPhysicalLayerTestTxFinal"        },    /* VMSV_98        */
+    {((word)99),  "VmsvResetINICSSOResult"              },    /* VMSV_99        */
+    {((word)100), "MostEmergencyCondition"              },    /* VMSV_100       */
+    {((word)101), "VmsvSendMdmMsv2NwmConfStateNok"      },    /* VMSV_101       */
+    {((word)102), "VmsvHandleCodingErrorsStatus"        },    /* VMSV_102       */
+    {STR_TERMINATION,   NULL                            }     /* end of table   */
+};
+
+
+/*-----------------------------------------------------------------------------*/
+/* list of WMCS function names                                                 */
+/*-----------------------------------------------------------------------------*/
+/*  Function ID  | Name                                                        */
+/*-----------------------------------------------------------------------------*/
+TNumString WMCS_FuncList[] =
+{
+    {((word) 0),  "WmcsInit"                            },    /* WMCS_0         */
+    {((word) 1),  "WmcsService"                         },    /* WMCS_1         */
+    {((word) 2),  "WmcsSetPendingEvent"                 },    /* WMCS_2         */
+    {((word) 3),  "WmcsGetNextEventToHandle"            },    /* WMCS_3         */
+    {((word) 4),  "MostGetNodeAdr"                      },    /* WMCS_4         */
+    {((word) 5),  "MostGetNodePos"                      },    /* WMCS_5         */
+    {((word) 6),  "MostGetGroupAdr"                     },    /* WMCS_6         */
+    {((word) 8),  "MostSetGetNodeAdr"                   },    /* WMCS_8         */
+    {((word) 9),  "MostSetNodeAdr"                      },    /* WMCS_9         */
+    {((word)10),  "MostSetGroupAdr"                     },    /* WMCS_10        */
+    {((word)11),  "MostCheckOwnAddress"                 },    /* WMCS_11        */
+    {((word)14),  "Wmcs_Go_Protected"                   },    /* WMCS_14        */
+    {((word)15),  "Wmcs_Go_SemiProtected"               },    /* WMCS_15        */
+    {((word)17),  "WmcsHandleNodeAddrStatus"            },    /* WMCS_17        */
+    {((word)20),  "WmcsHandleGroupAddrStatus"           },    /* WMCS_20        */
+    {((word)21),  "MostSelectClockOutput"               },    /* WMCS_21        */
+    {((word)22),  "MostSetAltPAdr"                      },    /* WMCS_22        */
+    {((word)23),  "WmcsRetry"                           },    /* WMCS_23        */
+    {((word)24),  "WmcsForceAltPacketAddr"              },    /* WMCS_24        */
+    {((word)25),  "WmcsRefreshNodePos"                  },    /* WMCS_25        */
+    {((word)26),  "WmcsRequestCodingErrors"             },    /* WMCS_26        */
+    {((word)27),  "WmcsHandleCodingErrorsStatus"        },    /* WMCS_27        */
+    {((word)28),  "MostGetCodingErrors"                 },    /* WMCS_28        */
+    {((word)29),  "MostCountCodingErrors"               },    /* WMCS_29        */
+    {((word)30),  "WmcsCodingErrorsCallback"            },    /* WMCS_30        */
+    {((word)31),  "WmcsCodingErrorsTimeout"             },    /* WMCS_31        */
+    {((word)33),  "MostReadConfString"                  },    /* WMCS_33        */
+    {((word)34),  "WmcsHandleMemoryStatus"              },    /* WMCS_34        */
+    {((word)35),  "WmcsHandleMemoryError"               },    /* WMCS_35        */
+    {((word)42),  "MostSetMEPFilterMode"                },    /* WMCS_42        */
+    {((word)43),  "MostGetMEPFilterMode"                },    /* WMCS_43        */
+    {((word)44),  "WmcsHandleMEPFilterModeStatus"       },    /* WMCS_44        */
+    {((word)45),  "WmcsHandleMEPFilterModeError"        },    /* WMCS_45        */
+    {((word)46),  "MostSetMEPHashTable"                 },    /* WMCS_46        */
+    {((word)47),  "MostGetMEPHashTable"                 },    /* WMCS_47        */
+    {((word)48),  "WmcsHandleMEPHashTableStatus"        },    /* WMCS_48        */
+    {((word)49),  "WmcsHandleMEPHashTableError"         },    /* WMCS_49        */
+    {((word)50),  "MostSetEUI48"                        },    /* WMCS_50        */
+    {((word)51),  "WmcsHandleSetEUI48Result"            },    /* WMCS_51        */
+    {((word)52),  "WmcsHandleSetEUI48Error"             },    /* WMCS_52        */
+    {((word)53),  "MostSetPacketRetryTime"              },    /* WMCS_53        */
+    {((word)54),  "MostGetPacketRetryTime"              },    /* WMCS_54        */
+    {((word)55),  "WmcsHandlePacketRetryTimeStatus"     },    /* WMCS_55        */
+    {((word)56),  "WmcsHandlePacketRetryTimeError"      },    /* WMCS_56        */
+    {((word)57),  "MostGetEUI48"                        },    /* WMCS_57        */
+    {((word)58),  "WmcsRequestEUI48"                    },    /* WMCS_58        */
+    {((word)59),  "WmcsHandleEUI48Status"               },    /* WMCS_59        */
+    {((word)60),  "WmcsSetINICMemPending"               },    /* WMCS_60        */
+    {STR_TERMINATION,   NULL                        }     /* end of table   */
+};
+
+
+/*-----------------------------------------------------------------------------*/
+/* list of WADS function names                                                 */
+/*-----------------------------------------------------------------------------*/
+/*  Function ID  | Name                                                        */
+/*-----------------------------------------------------------------------------*/
+TNumString WADS_FuncList[] =
+{
+    {((word) 0),  "DataInit"                            },    /* ADS_0          */
+    {((word) 1),  "DataService"                         },    /* ADS_1          */
+    {((word) 2),  "DataSetPendingEvent"                 },    /* ADS_2          */
+    {((word) 3),  "DataGetNextEventToHandle"            },    /* ADS_3          */
+    {((word) 4),  "DataGetTxPtrExt"                     },    /* ADS_4          */
+    {((word) 5),  "DataSend"                            },    /* ADS_5          */
+    {((word) 6),  "DataTxFinal"                         },    /* ADS_6          */
+    {((word) 8),  "DataRxTrigger"                       },    /* ADS_8          */
+    {((word) 9),  "DataRxOutTrigger"                    },    /* ADS_9          */
+    {((word)10),  "DataNIStateNetOn"                    },    /* ADS_10         */
+    {STR_TERMINATION,   NULL                        }     /* end of table   */
+};
+
+/*-----------------------------------------------------------------------------*/
+/* list of WSCM function names                                                 */
+/*-----------------------------------------------------------------------------*/
+/*  Function ID  | Name                                                        */
+/*-----------------------------------------------------------------------------*/
+TNumString WSCM_FuncList[] =
+{
+    {((word) 0),  "ScmInit"                             },    /* SCM_0         */
+    {((word) 1),  "ScmService"                          },    /* SCM_1         */
+    {((word) 2),  "ScmSetPendingEvent"                  },    /* SCM_2         */
+    {((word) 3),  "ScmGetNextEventToHandle"             },    /* SCM_3         */
+    {((word) 4),  "ScmGoProtected"                      },    /* SCM_4         */
+    {((word) 5),  "ScmSendHandleMsg"                    },    /* SCM_5         */
+    {((word) 6),  "ScmSetByteByMsg"                     },    /* SCM_6         */
+    {((word) 7),  "ScmOpenPort"                         },    /* SCM_7         */
+    {((word) 8),  "ScmCreateSocket"                     },    /* SCM_8         */
+    {((word)10),  "ScmGetMuteMode"                      },    /* SCM_10        */
+    {((word)11),  "ScmGetBoundary"                      },    /* SCM_11        */
+    {((word)15),  "ScmAllocOnlyMlb"                     },    /* SCM_15        */
+    {((word)16),  "ScmDeallocOnlyMlb"                   },    /* SCM_16        */
+    {((word)18),  "ScmHandleResult"                     },    /* SCM_18        */
+    {((word)19),  "ScmHandleCreateSocketResult"         },    /* SCM_19        */
+    {((word)20),  "ScmHandleConnectSocketsResult"       },    /* SCM_20        */
+    {((word)21),  "ScmHandleMuteModeStatus"             },    /* SCM_21        */
+    {((word)22),  "ScmHandleMlbAllocOnlyResult"         },    /* SCM_22        */
+    {((word)24),  "ScmHandleBandwidthStatus"            },    /* SCM_24        */
+    {((word)26),  "ScmHandleError"                      },    /* SCM_26        */
+    {((word)27),  "ScmClosePort"                        },    /* SCM_27        */
+    {((word)28),  "ScmHandleSourceDropStatus"           },    /* SCM_28        */
+    {((word)29),  "ScmHandleSCErrorStatus"              },    /* SCM_29        */
+    {((word)30),  "ScmGetBoundaryExt"                   },    /* SCM_30        */
+    {((word)31),  "ScmDestroySocketExt"                 },    /* SCM_31        */
+    {((word)32),  "ScmConnectSocketsExt"                },    /* SCM_32        */
+    {((word)35),  "ScmGetSource"                        },    /* SCM_35        */
+    {((word)36),  "ScmAssembleErrResList"               },    /* SCM_36        */
+    {((word)37),  "ScmHandleRemoteGetSourceStatus"      },    /* SCM_37        */
+    {((word)38),  "ScmPMCheck"                          },    /* SCM_38        */
+    {((word)39),  "ScmPMService"                        },    /* SCM_39        */
+    {((word)40),  "ScmPMCreateResult"                   },    /* SCM_40        */
+    {((word)41),  "ScmPMDestroyResult"                  },    /* SCM_41        */
+    {((word)42),  "ScmPMComplete"                       },    /* SCM_42        */
+    {((word)43),  "ScmPMRecheck"                        },    /* SCM_43        */
+    {((word)44),  "ScmHandleSCDemuteStatus"             },    /* SCM_44        */
+    {((word)45),  "ScmPMOpenPortResult"                 },    /* SCM_45        */
+    {STR_TERMINATION,   NULL                        }     /* end of table  */
+};
+
+
+/*-----------------------------------------------------------------------------*/
+/* list of AAM function names                                                  */
+/*-----------------------------------------------------------------------------*/
+/*  Function ID  | Name                                                        */
+/*-----------------------------------------------------------------------------*/
+TNumString AAM_FuncList[] =
+{
+    {((word) 0),  "AamInit"                             },    /* AAM_0          */
+    {((word) 1),  "AamService"                          },    /* AAM_1          */
+    {((word) 2),  "AamSetPendingEvent"                  },    /* AAM_2          */
+    {((word) 3),  "AamGetTxPtr"                         },    /* AAM_3          */
+    {((word) 4),  "AamSend"                             },    /* AAM_4          */
+    {((word) 5),  "AamCheckPendingSlots"                },    /* AAM_5          */
+    {((word) 6),  "AamBufInit"                          },    /* AAM_6          */
+    {((word) 7),  "AamGetTxSlotByMsgPtr"                },    /* AAM_7          */
+    {((word) 8),  "AamSchedule"                         },    /* AAM_8          */
+    {((word) 9),  "AamSend2"                            },    /* AAM_9          */
+    {((word)10),  "AamStop"                             },    /* AAM_10         */
+    {((word)11),  "AamFinal_Tx"                         },    /* AAM_11         */
+    {((word)12),  "AamSendNextAms"                      },    /* AAM_12         */
+    {((word)13),  "AamGetNextEventToHandle"             },    /* AAM_13         */
+    {((word)14),  "AamFreeBuf"                          },    /* AAM_14         */
+    {((word)15),  "AamCheckAddressingMode"              },    /* AAM_15         */
+    {((word)16),  "AamSearchSameTarget"                 },    /* AAM_16         */
+    {((word)17),  "AamAmsSameTarget"                    },    /* AAM_17         */
+    {((word)18),  "AamControl"                          },    /* AAM_18         */
+    {((word)19),  "AamStopRx"                           },    /* AAM_19         */
+    {((word)0x8000),  "AamTxStatus"                     },    /* AAM_CB1        */
+
+    {STR_TERMINATION,   NULL                            }     /* end of table   */
+};
+
+
+/*-----------------------------------------------------------------------------*/
+/* list of MDM function names                                                  */
+/*-----------------------------------------------------------------------------*/
+/*  Function ID  | Name                                                        */
+/*-----------------------------------------------------------------------------*/
+TNumString MDM_FuncList[] =
+{
+    {((word) 0),  "MdmInit"                             },    /* MDM_0         */
+    {((word) 1),  "MdmMsgSendMns"                       },    /* MDM_1         */
+    {((word) 2),  "MdmMsgSendApp"                       },    /* MDM_2         */
+    {((word) 3),  "MdmSendLostMsgInfo"                  },    /* MDM_3         */
+    {((word) 4),  "MdmReqBufPtr"                        },    /* MDM_4         */
+    {((word) 5),  "MdmSetBufFree"                       },    /* MDM_5         */
+    {((word) 6),  "MdmMsgSendInt"                       },    /* MDM_6         */
+    {((word) 7),  "MdmTxCompleteMns"                    },    /* MDM_7         */
+    {((word) 8),  "MdmTxCompleteApp"                    },    /* MDM_8         */
+    {((word) 9),  "MdmSetDbgLevel"                      },    /* MDM_9         */
+    {((word)10),  "MdmSetTimeStamp"                     },    /* MDM_10        */
+    {((word)11),  "MdmSetCaseId"                        },    /* MDM_11        */
+    {((word)12),  "MdmSetClassSpecificParams"           },    /* MDM_12        */
+
+    {STR_TERMINATION,   NULL                            }     /* end of table   */
+};
+
+
+
+/*-----------------------------------------------------------------------------*/
+/* list of service names                                                       */
+/*-----------------------------------------------------------------------------*/
+/*  Service ID  | Name                                                         */
+/*-----------------------------------------------------------------------------*/
+TNumString MNS_ServiceList[] =
+{
+    {((word)0x0000),  "None (unrequested call of MostService(); non-critical)" },    /* MNS_P_NONE     */
+    {((word)0x0001),  "PMS"             },    /* MNS_P_SRV_PMS  */
+    {((word)0x0002),  "MIS"             },    /* MNS_P_SRV_MIS  */
+    {((word)0x0004),  "MNS"             },    /* MNS_P_SRV_MNS  */
+    {((word)0x0008),  "wAMS"            },    /* MNS_P_SRV_AMS  */
+    {((word)0x0010),  "wMCS"            },    /* MNS_P_SRV_WMCS */
+    {((word)0x0020),  "wADS"            },    /* MNS_P_SRV_WADS */
+    {((word)0x0040),  "vMSV"            },    /* MNS_P_SRV_VMSV */
+    {((word)0x0080),  "wSCM"            },    /* MNS_P_SRV_WSCM */
+    {((word)0x0100),  "AAM"             },    /* MNS_P_SRV_AAM  */
+    {((word)0x4000),  "MDM"             },    /* MNS_P_SRV_MDM  */
+    {((word)0x8000),  "MBM"             },    /* MNS_P_SRV_MBM  */
+    {STR_TERMINATION,   NULL    }     /* end of table   */
+};
+
+TNumString MNS_ConfigList[] =
+{
+    {((word)0x0002),  "PACKET_COMMUNICATION_ONLY"               },    /* MNS_F_PACKET_COMMUNICATION_ONLY  */
+    {((word)0x0004),  "MNS_IGNORE_VERSION_INFO"                 },    /* MNS_F_IGNORE_VERSION_CHECK  */
+    {((word)0x0008),  "ALLOW_AUTO_CONFIG"                       },    /* MNS_F_ALLOW_AUTO_CONFIG  */
+    {STR_TERMINATION,   NULL                            }     /* end of table   */
+};
+
+/*-----------------------------------------------------------------------------*/
+TNumString MNS_L2_FlagList[] =
+{
+#ifdef NS_MNS_MNS2
+    {((word)MNS2_E_TIMER_EXTERN),  "MNS2_E_TIMER (0x000A)" },
+    {((word)MNS2_E_PEN_EXTERN),    "MNS2_E_PEN (0x8000)"   },
+    {((word)MNS2_E_REQ_EXTERN),    "MNS2_E_REQ (0x4000)"   },
+#endif
+    {STR_TERMINATION,      NULL                    }     /* end of table   */
+};
+
+/*-----------------------------------------------------------------------------*/
+TNumString MNS_MHP_FlagList[] =
+{
+#ifdef NS_MNS_MHP
+    {((word)MNSH_E_TX_EVENT_EXTERN), "MNSH_E_TX_EVENT (0x0001)" },
+    {((word)MNSH_E_TIMER_TX_EXTERN), "MNSH_E_TIMER_TX (0x0002)" },
+    {((word)MNSH_E_TIMER_RX_EXTERN), "MNSH_E_TIMER_RX (0x0008)" },
+    {((word)MNSH_E_PEN_EXTERN),      "MNSH_E_PEN (0x8000)"      },
+    {((word)MNSH_E_REQ_EXTERN),      "MNSH_E_REQ (0x4000)"      },
+#endif
+    {STR_TERMINATION,        NULL                       }     /* end of table   */
+};
+
+/*-----------------------------------------------------------------------------*/
+TNumString MNS_PMHS_FlagList[] =
+{
+#ifdef NS_MNS_PMHS
+    {((word)MNSP_E_TIMER_TX_EXTERN), "MNSP_E_TIMER_TX (0x0002)" },
+    {((word)MNSP_E_TIMER_RX_EXTERN), "MNSP_E_TIMER_RX (0x0020)" },
+    {((word)MNSP_E_PEN_EXTERN),      "MNSP_E_PEN (0x8000)"      },
+    {((word)MNSP_E_REQ_EXTERN),      "MNSP_E_REQ (0x4000)"      },
+#endif
+    {STR_TERMINATION,        NULL                       }     /* end of table   */
+};
+
+
+/*-----------------------------------------------------------------------------*/
+/* list of SMSC chips                                                         */
+/*-----------------------------------------------------------------------------*/
+/*  Service ID  | Name                                                         */
+/*-----------------------------------------------------------------------------*/
+TNumString MNS_ChipList[] =
+{
+    {((word) 1), "OS81050 Rev.D" },    /* OS81050D    */
+    {((word) 2), "OS81050 Rev.E" },    /* OS81050E    */
+    {((word) 3), "OS81082 Rev.A" },    /* OS81082A    */
+    {((word) 4), "OS81082 Rev.B" },    /* OS81082B    */
+    {((word) 5), "OS81050"       },    /* OS81050_ANY */
+    {((word) 6), "OS81082"       },    /* OS81082_ANY */
+    {((word) 7), "OS81110"       },    /* OS81110_ANY */
+    {((word) 8), "OS81110 Rev.A" },    /* OS81110A    */
+    {((word) 9), "OS81110 Rev.B" },    /* OS81110B    */
+    {((word)10), "OS81110 Rev.C" },    /* OS81110C    */
+    {((word)11), "OS81060 Rev.A" },    /* OS81060A    */
+    {((word)12), "OS81060"       },    /* OS81060_ANY */
+    {((word)13), "OS81092 Rev.B" },    /* OS81092B    */
+    {((word)14), "OS81092"       },    /* OS81092ANY  */
+    {((word)15), "OS81082 Rev.C" },    /* OS81082C    */
+    {((word)16), "OS81092 Rev.C" },    /* OS81092C    */
+    {((word)17), "OS81110 Rev.D" },    /* OS81110D    */
+    {STR_TERMINATION,   NULL } /* end of table */
+};
+
+/*-----------------------------------------------------------------------------*/
+/* list of transition causes for Protected Mode                                */
+/*-----------------------------------------------------------------------------*/
+/*  ID          | Name                                                         */
+/*-----------------------------------------------------------------------------*/
+TNumString MNS_TC_List[] =
+{
+    {((word)0),                 "Reset"         },
+    {((word)1),                 "CMD"           },
+    {((word)2),                 "FailSafe"      },
+    {((word)3),                 "WatchdogRX"    },
+    {((word)4),                 "WatchdogTXICM" },
+    {((word)5),                 "WatchdogTXMCM" },
+    {((word)6),                 "WatchdogTXMDP" },
+    {STR_TERMINATION,   NULL            }
+};
+
+/*-----------------------------------------------------------------------------*/
+/* list of TM operations                                                       */
+/*-----------------------------------------------------------------------------*/
+/*  Service ID  | Name                                                         */
+/*-----------------------------------------------------------------------------*/
+TNumString MNS_TM_OP[] =
+{
+    {((word)1),  "Diff" },                  /* MNS_TM_OP_DIFF */
+    {((word)2),  "Update" },                /* MNS_TM_OP_UPDATE */
+    {((word)4),  "MinTimeout" },            /* MNS_TM_OP_MIN_TIMEOUT */
+    {((word)8),  "Schedule" },              /* MNS_TM_OP_SCHEDULE */
+    {STR_TERMINATION,   NULL  }     /* end of table   */
+};
+
+/*-----------------------------------------------------------------------------*/
+/* list of TM events                                                           */
+/*-----------------------------------------------------------------------------*/
+/*  Service ID  | Name                                                         */
+/*-----------------------------------------------------------------------------*/
+TNumString MNS_TM_EV[] =
+{
+    {((word)1),  "Timeout by INIC" },       /* MNS_TM_EV_TIMEOUT_INIC */
+    {((word)2),  "Timeout by App" },        /* MNS_TM_EV_TIMEOUT_API */
+    {((word)3),  "Timeout by RX" },         /* MNS_TM_EV_TIMEOUT */
+    {((word)4),  "Schedule" },              /* MNS_TM_EV_SCHEDULE */
+    {((word)5),  "Update" },                /* MNS_TM_EV_UPDATE */
+    {((word)6),  "Service" },               /* MNS_TM_EV_SERVICE */
+    {STR_TERMINATION,   NULL  }     /* end of table   */
+};
+
+
+/*--------------------------------------------------------------------------*/
+/* list of FBlocks                                                          */
+/*--------------------------------------------------------------------------*/
+/*    FBlockID       |  Name        |  Ptr to list of FktIDs                */
+/*--------------------------------------------------------------------------*/
+TFBlockList FBlockList[] =
+{
+    {FBLOCK_INIC,       "INIC",         FktList_INIC         },    /*       */
+    {FBLOCK_NETBLOCK,   "NetBlock",     FktList_NetBlock     },    /*       */
+#ifdef ET_MIN
+    {FBLOCK_ET,         "FBlock ET",    FktList_ET           },    /*       */
+#endif
+    {STR_TERMINATION,   NULL,           NULL                 }
+};
+
+
+/*--------------------------------------------------------------------------*/
+/* list of INIC's FktIDs                                                    */
+/*--------------------------------------------------------------------------*/
+/*    FktID                           |  Name                               */
+/*--------------------------------------------------------------------------*/
+TFktList FktList_INIC[] =
+{
+    {FUNCID_INIC_FKTIDS,                OP_PROP, "FktIDs"                   },
+    {FUNCID_INIC_NOTIFICATION,          OP_PROP, "Notification"             },
+    {FUNCID_INIC_NOTIFICATIONCHECK,     OP_PROP, "NotificationCheck"        },
+    {FUNCID_INIC_VERSIONINFO,           OP_PROP, "VersionInfo"              },
+    {FUNCID_INIC_RMCK,                  OP_PROP, "RMCK"                     },
+    {FUNCID_INIC_TIMER,                 OP_FUNC, "Timer"                    },
+    {FUNCID_INIC_RESET,                 OP_FUNC, "Reset"                    },
+    {FUNCID_INIC_TMCLOCKSOURCE,         OP_FUNC, "TMClockSource"            },
+    {FUNCID_INIC_TMCLOCKFREQUENCY,      OP_FUNC, "TMClockFrequency"         },
+    {FUNCID_INIC_BIST,                  OP_PROP, "BIST"                     },
+    {FUNCID_INIC_EHCISTATE,             OP_PROP, "EHCIState"                },
+    {FUNCID_INIC_FBLOCKIDSINTERNAL,     OP_PROP, "FBlockIDsInternal"        },
+    {FUNCID_INIC_ALTPACKETADDRESS,      OP_PROP, "AltPacketAddress"         },
+    {FUNCID_INIC_MIDLEVELRETRY,         OP_PROP, "MidLevelRetry"            },
+    {FUNCID_INIC_MCMRXBUFSIZE,          OP_PROP, "MCMRxBufSize"             },
+    {FUNCID_INIC_ABILITYTOSEGMENT,      OP_PROP, "AbilityToSegment"         },
+    {FUNCID_INIC_TIMESTAMPENABLE,       OP_PROP, "TimeStampable"            },
+    {FUNCID_INIC_REMOTEACCESS,          OP_PROP, "RemoteAccess"             },
+    {FUNCID_INIC_WATCHDOG,              OP_FUNC, "Watchdog"                 },
+    {FUNCID_INIC_WATCHDOGMODE,          OP_PROP, "WatchdogMode"             },
+    {FUNCID_INIC_RETRYOPTIONS,          OP_PROP, "RetryOptions"             },
+    {FUNCID_INIC_MEPFILTERMODE,         OP_PROP, "MEPFilterMode"            },
+    {FUNCID_INIC_MEPHASHTABLE,          OP_PROP, "MEPHashTable"             },
+    {FUNCID_INIC_SETEUI48,              OP_FUNC, "ChangeEUI48"              },
+    {FUNCID_INIC_OPENPORT,              OP_FUNC, "OpenPort"                 },
+    {FUNCID_INIC_CLOSEPORT,             OP_FUNC, "ClosePort"                },
+    {FUNCID_INIC_REMOTEGETSOURCE,       OP_FUNC, "RemoteGetSource"          },
+    {FUNCID_INIC_CREATESOCKET,          OP_FUNC, "CreateSocket"             },
+    {FUNCID_INIC_DESTROYSOCKET,         OP_FUNC, "DestroySocket"            },
+    {FUNCID_INIC_CONNECTSOCKETS,        OP_FUNC, "ConnectSocket"            },
+    {FUNCID_INIC_DISCONNECTSOCKETS,     OP_FUNC, "DisconnectSockets"        },
+    {FUNCID_INIC_MUTEMODE,              OP_PROP, "MuteMode"                 },
+    {FUNCID_INIC_MEDIALBALLOCATEONLY,   OP_FUNC, "MediaLBAllocateOnly"      },
+    {FUNCID_INIC_MEDIALBDEALLOCATEONLY, OP_FUNC, "MediaLBDeallocateOnly"    },
+    {FUNCID_INIC_MUTECONNECTION,        OP_FUNC, "MuteConnection"           },
+    {FUNCID_INIC_DEMUTECONNECTION,      OP_FUNC, "DemuteConnection"         },
+    {FUNCID_INIC_BANDWIDTH,             OP_PROP, "Bandwidth"                },
+    {FUNCID_INIC_SOURCEDROP,            OP_PROP, "SourceDrop"               },
+    {FUNCID_INIC_SCERROR,               OP_PROP, "SCError"                  },
+    {FUNCID_INIC_NWSTARTUP,             OP_FUNC, "NWStartup"                },
+    {FUNCID_INIC_NWSHUTDOWN,            OP_FUNC, "NWShutdown"               },
+    {FUNCID_INIC_DEVICEMODE,            OP_PROP, "DeviceMode"               },
+    {FUNCID_INIC_NISTATE,               OP_PROP, "NIState"                  },
+    {FUNCID_INIC_MAXIMUMPOSITION,       OP_PROP, "MaximumPosition"          },
+    {FUNCID_INIC_NCEDELAYED,            OP_PROP, "NWChangeEvent"            },
+    {FUNCID_INIC_LOCKSTATE,             OP_PROP, "LockState"                },
+    {FUNCID_INIC_RBDTRIGGER,            OP_FUNC, "RBDTrigger"               },
+    {FUNCID_INIC_RBDRESULT,             OP_PROP, "RBDResults"               },
+    {FUNCID_INIC_NCSTATE,               OP_PROP, "NCState"                  },
+    {FUNCID_INIC_NIWAKEUPMODE,          OP_PROP, "NIWakeupMode"             },
+    {FUNCID_INIC_NIEVENT,               OP_PROP, "NIEvent"                  },
+    {FUNCID_INIC_SYSERRMONITOR,         OP_PROP, "SysErrMonitor"            },
+    {FUNCID_INIC_NUMCODINGERRORS,       OP_PROP, "NumCodingErrors"          },
+    {FUNCID_INIC_PMISTATE,              OP_PROP, "PMIState"                 },
+    {FUNCID_INIC_NETONTIMER,            OP_PROP, "NetOnTimer"               },
+    {FUNCID_INIC_SSORESULT,             OP_PROP, "SSOResult"                },
+    {STR_TERMINATION,                   0,       NULL                       }
+};
+
+/*--------------------------------------------------------------------------*/
+/* list of NetBlock's FktIDs                                                */
+/*--------------------------------------------------------------------------*/
+/*    FktID                           |  Name                               */
+/*--------------------------------------------------------------------------*/
+TFktList FktList_NetBlock[] =
+{
+    {FUNC_FBLOCKIDS,                    OP_PROP, "FBlockIDs"            },
+    {FUNC_DEVICEINFO,                   OP_PROP, "DeviceInfo"           },
+    {FUNC_NODEPOSITION,                 OP_PROP, "NodePositionAddress"  },
+    {FUNC_NODEADDRESS,                  OP_PROP, "NodeAddress"          },
+    {FUNC_GROUPADDRESS,                 OP_PROP, "GroupAddress"         },
+    {FUNC_SHUTDOWN,                     OP_FUNC, "ShutDown"             },
+    {FUNC_RETRYPARAMETERS,              OP_PROP, "RetryParameters"      },
+    {FUNC_SAMPLINGFREQUENCY,            OP_PROP, "SamplingFrequency"    },
+    {FUNC_SHUTDOWNREASON,               OP_PROP, "ShutDownReason"       },
+    {FUNC_VERSION,                      OP_PROP, "Version"              },
+    {FUNC_FBLOCKINFO,                   OP_PROP, "FBlockInfo"           },
+    {FUNC_IMPLFBLOCKIDS,                OP_PROP, "ImplFBlockIDs"        },
+    {FUNC_EUI48,                        OP_PROP, "EUI48"                },
+    {FUNC_NB_RBDRESULT,                 OP_PROP, "RBDResult"            },
+    {FUNC_NB_BOUNDARY,                  OP_PROP, "Boundary"             },
+    {STR_TERMINATION,                   0,       NULL                   }
+};
+
+
+
+/*--------------------------------------------------------------------------*/
+/* list of FBlock ET's FktIDs                                               */
+/*--------------------------------------------------------------------------*/
+/*    FktID                           |  Name                               */
+/*--------------------------------------------------------------------------*/
+TFktList FktList_ET[] =
+{
+#ifdef ET_MIN
+    {FUNCID_ET_SHUTDOWN,                  OP_FUNC, "ShutDown"               },
+    {FUNCID_ET_SENDMESSAGE,               OP_FUNC, "SendMessage"            },
+    {FUNCID_ET_ECHOMESSAGE,               OP_FUNC, "EchoMessage"            },
+    {FUNCID_ET_MESSAGEBUFSIZE,            OP_PROP, "MessageBufSize"         },
+    {FUNCID_ET_RESET,                     OP_FUNC, "Reset"                  },
+    {FUNCID_ET_NOTIFICATIONMATRIXSIZE,    OP_PROP, "NotificationMatrixSize" },
+    {FUNCID_ET_VERSION,                   OP_PROP, "Version"                },
+    {FUNCID_ET_AUTOWAKEUP,                OP_PROP, "AutoWakeup"             },
+#ifdef SCOTT_LEE_3_0_3
+    {FUNCID_ET_DIAGTIMEOUT,               OP_PROP, "DiagTimeout"            },
+#endif
+    {FUNCID_ET_DIAGRESULT,                OP_PROP, "DiagResult"             },
+    {FUNCID_ET_CODINGERRORS,              OP_PROP, "CodingErrors"           },
+    {FUNCID_ET_SHUTDOWNSUSPENDMODE,       OP_PROP, "ShutDownSuspendMode"    },
+    {FUNCID_ET_MOSTREMOTERESET,           OP_PROP, "MOSTRemoteReset"        },
+
+#if (defined MHP_RX_MIN) || (defined MHP_TX_MIN) || (defined PMHT_MIN) || (defined PACKET_ON_SECOND_HOST)
+    {FUNCID_ET_DSIDSOCOUNT,               OP_PROP, "DSIDSOCount"            },
+  #if (defined MHP_TX_MIN)  || (defined PMHT_MIN) || (defined PACKET_ON_SECOND_HOST)
+    {FUNCID_ET_DSO,                       OP_FUNC, "ET_DSO"                 },
+  #endif
+
+  #if (defined MHP_RX_MIN) || (defined PACKET_ON_SECOND_HOST)
+    {FUNCID_ET_DSIHOLD,                   OP_FUNC, "ET_DSIHold"             },
+  #endif
+#endif
+
+#ifdef ET_ADD6
+    {FUNCID_ET_CENTRALREGISTRYSIZE,       OP_PROP, "CentralRegistrySize"    },
+#endif
+
+#ifdef ET_ADD7
+    {FUNCID_ET_ACTIVATESLAVEMODE,         OP_FUNC, "ActivateSlaveMode"      },
+#endif
+
+#ifdef ET_ADD8
+    {FUNCID_ET_ECLTRIGGER,                OP_FUNC, "ECLTrigger"             },
+    {FUNCID_ET_ECLINITIATORSTATE,         OP_PROP, "ECLInitiatorState"      },
+#endif
+
+#endif /* ET_MIN */
+
+    {STR_TERMINATION,                     0,       NULL                     }
+};
+
+
+
+
+/*--------------------------------------------------------------------------*/
+/* numbered list of OpType names                                            */
+/*--------------------------------------------------------------------------*/
+/*    OpType              |  Name                                           */
+/*--------------------------------------------------------------------------*/
+TNumString OpTypeList[] =
+{
+    {(word)(NST_PROP | OP_SET),     "Set"           },
+    {(word)(NST_PROP | OP_GET),     "Get"           },
+    {(word)(NST_PROP | OP_SETGET),  "SetGet"        },
+    {(word)(NST_PROP | OP_INC),     "Inc"           },
+    {(word)(NST_PROP | OP_DEC),     "Dec"           },
+    {(word)(NST_PROP | OP_STATUS),  "Status"        },
+    {(word)(NST_PROP | OP_ERROR),   "Error"         },
+    {(word)OP_START,                "Start"         },
+    {(word)OP_ABORT,                "Abort"         },
+    {(word)OP_STARTRESULT,          "StartResult"   },
+    {(word)OP_STARTACK,             "StartAck"      },
+    {(word)OP_ABORTACK,             "AbortAck"      },
+    {(word)OP_STARTRESULTACK,       "StartResultAck"},
+    {(word)OP_ERROR,                "Error"         },
+    {(word)OP_PROCESSING,           "Processing"    },
+    {(word)OP_RESULT,               "Result"        },
+    {(word)OP_ERRORACK,             "ErrorAck"      },
+    {(word)OP_PROCESSINGACK,        "ProcessingAck" },
+    {(word)OP_RESULTACK,            "ResultAck"     },
+    {STR_TERMINATION,       NULL            }
+};
+
+
+TStateList EHCIStateList[] =
+{
+    {(word)EHCISTATE_PROTECTED,       "Protected"          },
+    {(word)EHCISTATE_SEMI_PROTECTED,  "Semi-Protected"     },
+    {(word)EHCISTATE_ATTACHED,        "Attached"           },
+    {(word)EHCISTATE_UNKNOWN,         "Unknown"            },
+    {STR_TERMINATION,           NULL                 }
+};
+
+TStateMList StateMList[] =
+{
+    {NST_P1_EHCISTATE,     "EHCIState",         EHCIStateList   },
+    {NST_P1_NTF_STATE,     "Notification",      NULL            },
+    {NST_P1_INIT_PHASE,    "Init phase",        NULL            },
+    {NST_P1_RESET_PHASE,   "Reset phase",       NULL            },
+    {STR_TERMINATION,       NULL,               NULL            }
+};
+
+
+/*-----------------------------------------------------------------------------*/
+/* parameter description list for each event*/
+/*-----------------------------------------------------------------------------*/
+
+TParmList Ev_Entry_API[] =
+{
+    {TY_P_FUNC, "%s()"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_Entry_LIB[] =
+{
+    {TY_P_FUNC,  "%s()"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_Entry_MOD[] =
+{
+    {TY_P_FUNC,  "%s()"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_Exit_API[] =
+{
+    {TY_P_FUNC,  "%s()"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_Exit_LIB[] =
+{
+    {TY_P_FUNC,  "%s()"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_Exit_MOD[] =
+{
+    {TY_P_FUNC,  "%s()"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_Null[] =
+{
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_Request[] =
+{
+    {TY_P_NUMBER,  "[event=0x%04X]"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_Service[] =
+{
+    {TY_P_NUMBER,  "[event=0x%04X]"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_MostInit[] =
+{
+    {TY_P_NUMBER,  "V%x"},
+    {TY_P_NUMBER,  ".%x"},
+    {TY_P_NUMBER,  ".%x"},
+    {TY_P_STEP,    "%s"},
+    {TY_P_SRVMASK, "%s"},
+    {TY_P_CFGMASK, "%s"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_MostRequest[] =
+{
+    {TY_P_NUMBER,  "[event=0x%04X]"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_L2_Request[] =
+{
+    {TY_P_L2_FLAG,  "%s."},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_MHP_Request[] =
+{
+    {TY_P_MHP_FLAG,  "%s."},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_PMHS_Request[] =
+{
+    {TY_P_PMHS_FLAG,  "%s."},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_MostService[] =
+{
+    {TY_P_SERVICE,  "%s."},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_L2_Service[] =
+{
+    {TY_P_NUMBER,  "0x%04X"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_MHP_Service[] =
+{
+    {TY_P_NUMBER,  "0x%04X"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_PMHS_Service[] =
+{
+    {TY_P_NUMBER,  "0x%04X"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_StateChange[] =
+{
+    {TY_P_STATEMACHINE,     "%s state machine goes into state "},
+    {TY_P_STATE,            "%s."},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_TransitionCause[] =
+{
+    {TY_P_TRANSCAUSE,       "%s."},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_Tx[] =
+{
+    {TY_P_ADDRESS,  "0x%04X."           },
+    {TY_P_FBLOCK,   "%s."               },
+    {TY_P_NUMBER,   "%02X."             },
+    {TY_P_FKTID,    "%s."               },
+    {TY_P_OPTYPE,   "%s"                },
+    {TY_P_NUMBER,   " (len = %d bytes)" },
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_Tx_Packet[] =
+{
+    {TY_P_ADDRESS,  "0x%04X"            },
+    {TY_P_NUMBER,   " (len = %d bytes)" },
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_Rx[] =
+{
+    {TY_P_ADDRESS,  "0x%04X."           },
+    {TY_P_FBLOCK,   "%s."               },
+    {TY_P_NUMBER,   "%02X."             },
+    {TY_P_FKTID,    "%s."               },
+    {TY_P_OPTYPE,   "%s"                },
+    {TY_P_NUMBER,   " (len = %d bytes)" },
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_Rx_Packet[] =
+{
+    {TY_P_ADDRESS,  "0x%04X"            },
+    {TY_P_NUMBER,   " (len = %d bytes)" },
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_Assert[] =
+{
+    {TY_P_ASSERT,  "%d."},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_AllocHandle[] =
+{
+    { TY_P_NUMBER,      "0x%08X, " },
+    { TY_P_NUMBER,      "TX: %hu, " },
+    { TY_P_NUMBER,      "RX: %hu." },
+    { PAR_TERMINATION,  NULL}
+};
+
+TParmList Ev_MallocFail[] =
+{
+    { TY_P_NUMBER,      "%lu" },
+    { PAR_TERMINATION,  NULL}
+};
+
+TParmList Ev_InicInit[] =
+{
+    {TY_P_CHIP,    "%s"},
+    {TY_P_NUMBER,  " V%X"},
+    {TY_P_NUMBER,  ".%X"},
+    {TY_P_NUMBER,  ".%X"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_TM_Op[] =
+{
+    {TY_P_TM_OP,  "%s"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_TM_Ev[] =
+{
+    {TY_P_TM_EV,  "%s"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_TM_Min_Timeout[] =
+{
+    {TY_P_NUMBER,  "%d ms"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_TM_Diff[] =
+{
+    {TY_P_NUMBER,  "= %d ms / "},
+    {TY_P_NUMBER,  "scheduled = %d ms"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_TM_Flags[] =
+{
+    {TY_P_TM_FLAGS,  "%s"},
+    {PAR_TERMINATION, NULL}
+};
+
+TParmList Ev_TM_WatchdogMode[] =
+{
+    {TY_P_NUMBER,  "reset=%d "},
+    {TY_P_NUMBER,  "timeout=%dms "},
+    {TY_P_NUMBER,  "auto_shutdown_delay=%dms "},
+    {PAR_TERMINATION, NULL}
+};
+
+/*--------------------------------------------------------------------------*/
+/* list of events                                                           */
+/*--------------------------------------------------------------------------*/
+/*    Event ID           | Ptr to parms table | Format string               */
+/*--------------------------------------------------------------------------*/
+TEvents T_Events[] =
+{
+    {NST_E_FUNC_ENTRY_API,  Ev_Entry_API,    "entering "                      },
+    {NST_E_FUNC_ENTRY_LIB,  Ev_Entry_LIB,    "entering "                      },
+    {NST_E_FUNC_ENTRY_MOD,  Ev_Entry_MOD,    "entering "                      },
+    {NST_E_FUNC_EXIT_API,   Ev_Exit_API,     "leaving  "                      },
+    {NST_E_FUNC_EXIT_LIB,   Ev_Exit_LIB,     "leaving  "                      },
+    {NST_E_FUNC_EXIT_MOD,   Ev_Exit_MOD,     "leaving  "                      },
+    {NST_E_INIT,            Ev_Null,         "Init"                           },
+    {NST_E_SERVICE,         Ev_Service,      "Service of "                    },
+    {NST_E_REQUEST,         Ev_Request,      "Request for "                   },
+    {NST_E_TX,              Ev_Tx,           "TX of "                         },
+    {NST_E_RX,              Ev_Rx,           "RX of "                         },
+    {NST_E_TX_PACKET,       Ev_Tx_Packet,    "TX data packet to "             },
+    {NST_E_RX_PACKET,       Ev_Rx_Packet,    "RX data packet from "           },
+    {NST_E_MOST_INIT,       Ev_MostInit,     "Init of MOST NetServices "      },
+    {NST_E_MOST_SERVICE,    Ev_MostService,  "MOST Service for "              },
+    {NST_E_MOST_REQUEST,    Ev_MostRequest,  "MOST Request for "              },
+    {NST_E_STATE_CHANGE,    Ev_StateChange,  ""                               },
+    {NST_E_ASSERT,          Ev_Assert,       "FAILED ASSERT ON LINE "         },
+    {NST_E_ALLOC_HANDLE,    Ev_AllocHandle,  "Allocate: "                     },
+    {NST_E_FREE_HANDLE,     Ev_AllocHandle,  "Free:     "                     },
+    {NST_E_CONVERT_HANDLE,  Ev_AllocHandle,  "Convert:  "                     },
+    {NST_E_MALLOC_FAIL,     Ev_MallocFail,   "MemAlloc failed, size: "        },
+    {NST_E_INIC_INIT,       Ev_InicInit,     "Found INIC "                    },
+    {NST_E_TM_WATCHDOG_TIMEOUT, Ev_TM_WatchdogMode, "TM WatchdogMode: "       },
+    {NST_E_TM_OP,           Ev_TM_Op,        "TM Operation: "                 },
+    {NST_E_TM_EV,           Ev_TM_Ev,        "TM Event: "                     },
+    {NST_E_TM_MIN_TIMEOUT,  Ev_TM_Min_Timeout, "TM min_timeout: "             },
+    {NST_E_TM_DIFF,         Ev_TM_Diff,      "TM diff: "                      },
+    {NST_E_TM_FLAGS,        Ev_TM_Flags,     "TM flags: "                     },
+    {NST_E_TM_TBOFF,        Ev_TM_Min_Timeout, "WARNING: the EHC's time base seems to be off by " },
+    {NST_E_L2_SERVICE,      Ev_L2_Service,    "L2 Service for "               },
+    {NST_E_MHP_SERVICE,     Ev_MHP_Service,   "MHP Service for "              },
+    {NST_E_PMHS_SERVICE,    Ev_PMHS_Service,  "PMHS Service for "             },
+    {NST_E_L2_REQUEST,      Ev_L2_Request,    "L2 Request for "               },
+    {NST_E_MHP_REQUEST,     Ev_MHP_Request,   "MHP Request for "              },
+    {NST_E_PMHS_REQUEST,    Ev_PMHS_Request,  "PMHS Request for "             },
+    {NST_E_START_L2,        Ev_Null,          "Start of Layer2"               },
+    {NST_E_STOP_L2,         Ev_Null,          "Stop of Layer2"                },
+    {NST_E_START_PL,        Ev_Null,          "Start of packet layers"        },
+    {NST_E_STOP_PL,         Ev_Null,          "Stop of packet layers"         },
+    {NST_E_TRANSITION_CAUSE,Ev_TransitionCause, "Transition into EHCIState Protected, cause: "},
+    {EV_TERMINATION,        NULL,             NULL                             }
+};
+
+
+
+
